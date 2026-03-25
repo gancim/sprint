@@ -1,11 +1,9 @@
-import { and, eq, gte, sql } from "drizzle-orm";
-import type { Db } from "@paperclipai/db";
-import { agents, approvals, companies, costEvents, issues } from "@paperclipai/db";
+import { and, eq, sql } from "drizzle-orm";
+import type { Db } from "@sprintai/db";
+import { agents, approvals, companies, issues } from "@sprintai/db";
 import { notFound } from "../errors.js";
-import { budgetService } from "./budgets.js";
 
 export function dashboardService(db: Db) {
-  const budgets = budgetService(db);
   return {
     summary: async (companyId: string) => {
       const company = await db
@@ -61,27 +59,6 @@ export function dashboardService(db: Db) {
         if (row.status !== "done" && row.status !== "cancelled") taskCounts.open += count;
       }
 
-      const now = new Date();
-      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-      const [{ monthSpend }] = await db
-        .select({
-          monthSpend: sql<number>`coalesce(sum(${costEvents.costCents}), 0)::int`,
-        })
-        .from(costEvents)
-        .where(
-          and(
-            eq(costEvents.companyId, companyId),
-            gte(costEvents.occurredAt, monthStart),
-          ),
-        );
-
-      const monthSpendCents = Number(monthSpend);
-      const utilization =
-        company.budgetMonthlyCents > 0
-          ? (monthSpendCents / company.budgetMonthlyCents) * 100
-          : 0;
-      const budgetOverview = await budgets.overview(companyId);
-
       return {
         companyId,
         agents: {
@@ -91,18 +68,7 @@ export function dashboardService(db: Db) {
           error: agentCounts.error,
         },
         tasks: taskCounts,
-        costs: {
-          monthSpendCents,
-          monthBudgetCents: company.budgetMonthlyCents,
-          monthUtilizationPercent: Number(utilization.toFixed(2)),
-        },
         pendingApprovals,
-        budgets: {
-          activeIncidents: budgetOverview.activeIncidents.length,
-          pendingApprovals: budgetOverview.pendingApprovalCount,
-          pausedAgents: budgetOverview.pausedAgentCount,
-          pausedProjects: budgetOverview.pausedProjectCount,
-        },
       };
     },
   };

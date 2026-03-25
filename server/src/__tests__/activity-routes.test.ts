@@ -59,10 +59,10 @@ describe("activity routes", () => {
       },
     ]);
 
-    const res = await request(createApp()).get("/api/issues/PAP-475/runs");
+    const res = await request(createApp()).get("/api/issues/SPR-475/runs");
 
     expect(res.status).toBe(200);
-    expect(mockIssueService.getByIdentifier).toHaveBeenCalledWith("PAP-475");
+    expect(mockIssueService.getByIdentifier).toHaveBeenCalledWith("SPR-475");
     expect(mockIssueService.getById).not.toHaveBeenCalled();
     expect(mockActivityService.runsForIssue).toHaveBeenCalledWith("company-1", "issue-uuid-1");
     expect(res.body).toEqual([{ runId: "run-1" }]);

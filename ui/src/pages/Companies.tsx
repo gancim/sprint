@@ -5,7 +5,7 @@ import { useDialog } from "../context/DialogContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { companiesApi } from "../api/companies";
 import { queryKeys } from "../lib/queryKeys";
-import { formatCents, relativeTime } from "../lib/utils";
+import { relativeTime } from "../lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +24,6 @@ import {
   Trash2,
   Users,
   CircleDot,
-  DollarSign,
   Calendar,
 } from "lucide-react";
 
@@ -109,12 +108,6 @@ export function Companies() {
           const companyStats = stats?.[company.id];
           const agentCount = companyStats?.agentCount ?? 0;
           const issueCount = companyStats?.issueCount ?? 0;
-          const budgetPct =
-            company.budgetMonthlyCents > 0
-              ? Math.round(
-                  (company.spentMonthlyCents / company.budgetMonthlyCents) * 100,
-                )
-              : 0;
 
           return (
             <div
@@ -242,15 +235,6 @@ export function Companies() {
                   <CircleDot className="h-3.5 w-3.5" />
                   <span>
                     {issueCount} {issueCount === 1 ? "issue" : "issues"}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 tabular-nums">
-                  <DollarSign className="h-3.5 w-3.5" />
-                  <span>
-                    {formatCents(company.spentMonthlyCents)}
-                    {company.budgetMonthlyCents > 0
-                      ? <> / {formatCents(company.budgetMonthlyCents)} <span className="text-xs">({budgetPct}%)</span></>
-                      : <span className="text-xs ml-1">Unlimited budget</span>}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 ml-auto">

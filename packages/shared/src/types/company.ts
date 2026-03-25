@@ -9,12 +9,6 @@ export interface Company {
   pausedAt: Date | null;
   issuePrefix: string;
   issueCounter: number;
-  budgetMonthlyCents: number;
-  spentMonthlyCents: number;
-  requireBoardApprovalForNewAgents: boolean;
-  brandColor: string | null;
-  logoAssetId: string | null;
-  logoUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

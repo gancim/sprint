@@ -1,19 +1,17 @@
 import { Router, type Request } from "express";
-import type { Db } from "@paperclipai/db";
+import type { Db } from "@sprintai/db";
 import {
   companyPortabilityExportSchema,
   companyPortabilityImportSchema,
   companyPortabilityPreviewSchema,
   createCompanySchema,
-  updateCompanyBrandingSchema,
   updateCompanySchema,
-} from "@paperclipai/shared";
+} from "@sprintai/shared";
 import { forbidden } from "../errors.js";
 import { validate } from "../middleware/validate.js";
 import {
   accessService,
   agentService,
-  budgetService,
   companyPortabilityService,
   companyService,
   logActivity,
@@ -27,21 +25,6 @@ export function companyRoutes(db: Db, storage?: StorageService) {
   const agents = agentService(db);
   const portability = companyPortabilityService(db, storage);
   const access = accessService(db);
-  const budgets = budgetService(db);
-
-  async function assertCanUpdateBranding(req: Request, companyId: string) {
-    assertCompanyAccess(req, companyId);
-    if (req.actor.type === "board") return;
-    if (!req.actor.agentId) throw forbidden("Agent authentication required");
-
-    const actorAgent = await agents.getById(req.actor.agentId);
-    if (!actorAgent || actorAgent.companyId !== companyId) {
-      throw forbidden("Agent key cannot access another company");
-    }
-    if (actorAgent.role !== "ceo") {
-      throw forbidden("Only CEO agents can update company branding");
-    }
-  }
 
   async function assertCanManagePortability(req: Request, companyId: string, capability: "imports" | "exports") {
     assertCompanyAccess(req, companyId);
@@ -52,7 +35,7 @@ export function companyRoutes(db: Db, storage?: StorageService) {
     if (!actorAgent || actorAgent.companyId !== companyId) {
       throw forbidden("Agent key cannot access another company");
     }
-    if (actorAgent.role !== "ceo") {
+    if (actorAgent.role !== "scrum_master") {
       throw forbidden(`Only CEO agents can manage company ${capability}`);
     }
   }
@@ -226,43 +209,16 @@ export function companyRoutes(db: Db, storage?: StorageService) {
       entityId: company.id,
       details: { name: company.name },
     });
-    if (company.budgetMonthlyCents > 0) {
-      await budgets.upsertPolicy(
-        company.id,
-        {
-          scopeType: "company",
-          scopeId: company.id,
-          amount: company.budgetMonthlyCents,
-          windowKind: "calendar_month_utc",
-        },
-        req.actor.userId ?? "board",
-      );
-    }
     res.status(201).json(company);
   });
 
   router.patch("/:companyId", async (req, res) => {
     const companyId = req.params.companyId as string;
     assertCompanyAccess(req, companyId);
+    assertBoard(req);
 
     const actor = getActorInfo(req);
-    let body: Record<string, unknown>;
-
-    if (req.actor.type === "agent") {
-      // Only CEO agents may update company branding fields
-      const agentSvc = agentService(db);
-      const actorAgent = req.actor.agentId ? await agentSvc.getById(req.actor.agentId) : null;
-      if (!actorAgent || actorAgent.role !== "ceo") {
-        throw forbidden("Only CEO agents or board users may update company settings");
-      }
-      if (actorAgent.companyId !== companyId) {
-        throw forbidden("Agent key cannot access another company");
-      }
-      body = updateCompanyBrandingSchema.parse(req.body);
-    } else {
-      assertBoard(req);
-      body = updateCompanySchema.parse(req.body);
-    }
+    const body = updateCompanySchema.parse(req.body);
 
     const company = await svc.update(companyId, body);
     if (!company) {
@@ -279,29 +235,6 @@ export function companyRoutes(db: Db, storage?: StorageService) {
       entityType: "company",
       entityId: companyId,
       details: body,
-    });
-    res.json(company);
-  });
-
-  router.patch("/:companyId/branding", validate(updateCompanyBrandingSchema), async (req, res) => {
-    const companyId = req.params.companyId as string;
-    await assertCanUpdateBranding(req, companyId);
-    const company = await svc.update(companyId, req.body);
-    if (!company) {
-      res.status(404).json({ error: "Company not found" });
-      return;
-    }
-    const actor = getActorInfo(req);
-    await logActivity(db, {
-      companyId,
-      actorType: actor.actorType,
-      actorId: actor.actorId,
-      agentId: actor.agentId,
-      runId: actor.runId,
-      action: "company.branding_updated",
-      entityType: "company",
-      entityId: companyId,
-      details: req.body,
     });
     res.json(company);
   });

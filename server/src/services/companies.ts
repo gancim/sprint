@@ -1,5 +1,5 @@
-import { and, count, eq, gte, inArray, lt, sql } from "drizzle-orm";
-import type { Db } from "@paperclipai/db";
+import { count, eq } from "drizzle-orm";
+import type { Db } from "@sprintai/db";
 import {
   companies,
   companyLogos,
@@ -15,7 +15,6 @@ import {
   goals,
   heartbeatRuns,
   heartbeatRunEvents,
-  costEvents,
   financeEvents,
   approvalComments,
   approvals,
@@ -25,7 +24,7 @@ import {
   invites,
   principalPermissionGrants,
   companyMemberships,
-} from "@paperclipai/db";
+} from "@sprintai/db";
 import { notFound, unprocessable } from "../errors.js";
 
 export function companyService(db: Db) {
@@ -38,10 +37,6 @@ export function companyService(db: Db) {
     status: companies.status,
     issuePrefix: companies.issuePrefix,
     issueCounter: companies.issueCounter,
-    budgetMonthlyCents: companies.budgetMonthlyCents,
-    spentMonthlyCents: companies.spentMonthlyCents,
-    requireBoardApprovalForNewAgents: companies.requireBoardApprovalForNewAgents,
-    brandColor: companies.brandColor,
     logoAssetId: companyLogos.assetId,
     createdAt: companies.createdAt,
     updatedAt: companies.updatedAt,
@@ -52,49 +47,6 @@ export function companyService(db: Db) {
       ...company,
       logoUrl: company.logoAssetId ? `/api/assets/${company.logoAssetId}/content` : null,
     };
-  }
-
-  function currentUtcMonthWindow(now = new Date()) {
-    const year = now.getUTCFullYear();
-    const month = now.getUTCMonth();
-    return {
-      start: new Date(Date.UTC(year, month, 1, 0, 0, 0, 0)),
-      end: new Date(Date.UTC(year, month + 1, 1, 0, 0, 0, 0)),
-    };
-  }
-
-  async function getMonthlySpendByCompanyIds(
-    companyIds: string[],
-    database: Pick<Db, "select"> = db,
-  ) {
-    if (companyIds.length === 0) return new Map<string, number>();
-    const { start, end } = currentUtcMonthWindow();
-    const rows = await database
-      .select({
-        companyId: costEvents.companyId,
-        spentMonthlyCents: sql<number>`coalesce(sum(${costEvents.costCents}), 0)::int`,
-      })
-      .from(costEvents)
-      .where(
-        and(
-          inArray(costEvents.companyId, companyIds),
-          gte(costEvents.occurredAt, start),
-          lt(costEvents.occurredAt, end),
-        ),
-      )
-      .groupBy(costEvents.companyId);
-    return new Map(rows.map((row) => [row.companyId, Number(row.spentMonthlyCents ?? 0)]));
-  }
-
-  async function hydrateCompanySpend<T extends { id: string; spentMonthlyCents: number }>(
-    rows: T[],
-    database: Pick<Db, "select"> = db,
-  ) {
-    const spendByCompanyId = await getMonthlySpendByCompanyIds(rows.map((row) => row.id), database);
-    return rows.map((row) => ({
-      ...row,
-      spentMonthlyCents: spendByCompanyId.get(row.id) ?? 0,
-    }));
   }
 
   function getCompanyQuery(database: Pick<Db, "select">) {
@@ -149,8 +101,7 @@ export function companyService(db: Db) {
   return {
     list: async () => {
       const rows = await getCompanyQuery(db);
-      const hydrated = await hydrateCompanySpend(rows);
-      return hydrated.map((row) => enrichCompany(row));
+      return rows.map((row) => enrichCompany(row));
     },
 
     getById: async (id: string) => {
@@ -158,8 +109,7 @@ export function companyService(db: Db) {
         .where(eq(companies.id, id))
         .then((rows) => rows[0] ?? null);
       if (!row) return null;
-      const [hydrated] = await hydrateCompanySpend([row], db);
-      return enrichCompany(hydrated);
+      return enrichCompany(row);
     },
 
     create: async (data: typeof companies.$inferInsert) => {
@@ -168,8 +118,7 @@ export function companyService(db: Db) {
         .where(eq(companies.id, created.id))
         .then((rows) => rows[0] ?? null);
       if (!row) throw notFound("Company not found after creation");
-      const [hydrated] = await hydrateCompanySpend([row], db);
-      return enrichCompany(hydrated);
+      return enrichCompany(row);
     },
 
     update: (
@@ -226,12 +175,10 @@ export function companyService(db: Db) {
           await tx.delete(assets).where(eq(assets.id, existing.logoAssetId));
         }
 
-        const [hydrated] = await hydrateCompanySpend([{
+        return enrichCompany({
           ...updated,
           logoAssetId: logoAssetId === undefined ? existing.logoAssetId : logoAssetId,
-        }], tx);
-
-        return enrichCompany(hydrated);
+        });
       }),
 
     archive: (id: string) =>
@@ -247,8 +194,7 @@ export function companyService(db: Db) {
           .where(eq(companies.id, id))
           .then((rows) => rows[0] ?? null);
         if (!row) return null;
-        const [hydrated] = await hydrateCompanySpend([row], tx);
-        return enrichCompany(hydrated);
+        return enrichCompany(row);
       }),
 
     remove: (id: string) =>
@@ -261,7 +207,6 @@ export function companyService(db: Db) {
         await tx.delete(agentApiKeys).where(eq(agentApiKeys.companyId, id));
         await tx.delete(agentRuntimeState).where(eq(agentRuntimeState.companyId, id));
         await tx.delete(issueComments).where(eq(issueComments.companyId, id));
-        await tx.delete(costEvents).where(eq(costEvents.companyId, id));
         await tx.delete(financeEvents).where(eq(financeEvents.companyId, id));
         await tx.delete(approvalComments).where(eq(approvalComments.companyId, id));
         await tx.delete(approvals).where(eq(approvals.companyId, id));

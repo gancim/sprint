@@ -73,8 +73,6 @@ export interface Agent {
   adapterType: AgentAdapterType;
   adapterConfig: Record<string, unknown>;
   runtimeConfig: Record<string, unknown>;
-  budgetMonthlyCents: number;
-  spentMonthlyCents: number;
   pauseReason: PauseReason | null;
   pausedAt: Date | null;
   permissions: AgentPermissions;

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { AdapterEnvironmentTestResult } from "@paperclipai/shared";
+import type { AdapterEnvironmentTestResult } from "@sprintai/shared";
 import { useLocation, useNavigate, useParams } from "@/lib/router";
 import { useDialog } from "../context/DialogContext";
 import { useCompany } from "../context/CompanyContext";
@@ -33,9 +33,9 @@ import {
 import {
   DEFAULT_CODEX_LOCAL_BYPASS_APPROVALS_AND_SANDBOX,
   DEFAULT_CODEX_LOCAL_MODEL
-} from "@paperclipai/adapter-codex-local";
-import { DEFAULT_CURSOR_LOCAL_MODEL } from "@paperclipai/adapter-cursor-local";
-import { DEFAULT_GEMINI_LOCAL_MODEL } from "@paperclipai/adapter-gemini-local";
+} from "@sprintai/adapter-codex-local";
+import { DEFAULT_CURSOR_LOCAL_MODEL } from "@sprintai/adapter-cursor-local";
+import { DEFAULT_GEMINI_LOCAL_MODEL } from "@sprintai/adapter-gemini-local";
 import { resolveRouteOnboardingOptions } from "../lib/onboarding-route";
 import { AsciiArtAnimation } from "./AsciiArtAnimation";
 import { OpenCodeLogoIcon } from "./OpenCodeLogoIcon";
@@ -456,7 +456,7 @@ export function OnboardingWizard() {
 
       const agent = await agentsApi.create(createdCompanyId, {
         name: agentName.trim(),
-        role: "ceo",
+        role: "scrum_master",
         adapterType,
         adapterConfig: buildAdapterConfig(),
         runtimeConfig: {

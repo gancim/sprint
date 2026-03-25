@@ -10,11 +10,11 @@ import { test, expect } from "@playwright/test";
  *   Step 4 — Ready to launch (summary + open issue)
  *
  * By default this runs in skip_llm mode: we do NOT assert that an LLM
- * heartbeat fires. Set PAPERCLIP_E2E_SKIP_LLM=false to enable LLM-dependent
+ * heartbeat fires. Set SPRINT_E2E_SKIP_LLM=false to enable LLM-dependent
  * assertions (requires a valid ANTHROPIC_API_KEY).
  */
 
-const SKIP_LLM = process.env.PAPERCLIP_E2E_SKIP_LLM !== "false";
+const SKIP_LLM = process.env.SPRINT_E2E_SKIP_LLM !== "false";
 
 const COMPANY_NAME = `E2E-Test-${Date.now()}`;
 const AGENT_NAME = "CEO";
@@ -102,7 +102,7 @@ test.describe("Onboarding wizard", () => {
       (a: { name: string }) => a.name === AGENT_NAME
     );
     expect(ceoAgent).toBeTruthy();
-    expect(ceoAgent.role).toBe("ceo");
+    expect(ceoAgent.role).toBe("scrum_master");
     expect(ceoAgent.adapterType).not.toBe("process");
 
     const instructionsBundleRes = await page.request.get(
@@ -127,7 +127,7 @@ test.describe("Onboarding wizard", () => {
     expect(task.description).toContain(
       "You are the CEO. You set the direction for the company."
     );
-    expect(task.description).not.toContain("github.com/paperclipai/companies");
+    expect(task.description).not.toContain("github.com/sprintai/companies");
 
     if (!SKIP_LLM) {
       await expect(async () => {

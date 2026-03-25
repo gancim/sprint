@@ -11,10 +11,9 @@ console.log("Seeding database...");
 const [company] = await db
   .insert(companies)
   .values({
-    name: "Paperclip Demo Co",
+    name: "Sprint Demo Co",
     description: "A demo autonomous company",
     status: "active",
-    budgetMonthlyCents: 50000,
   })
   .returning();
 
@@ -23,12 +22,11 @@ const [ceo] = await db
   .values({
     companyId: company!.id,
     name: "CEO Agent",
-    role: "ceo",
+    role: "scrum_master",
     title: "Chief Executive Officer",
     status: "idle",
     adapterType: "process",
     adapterConfig: { command: "echo", args: ["hello from ceo"] },
-    budgetMonthlyCents: 15000,
   })
   .returning();
 
@@ -43,7 +41,6 @@ const [engineer] = await db
     reportsTo: ceo!.id,
     adapterType: "process",
     adapterConfig: { command: "echo", args: ["hello from engineer"] },
-    budgetMonthlyCents: 10000,
   })
   .returning();
 

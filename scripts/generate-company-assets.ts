@@ -15,7 +15,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { renderOrgChartPng, type OrgNode, type OrgChartOverlay } from "../server/src/routes/org-chart-svg.js";
 import { generateReadme } from "../server/src/services/company-export-readme.js";
-import type { CompanyPortabilityManifest } from "@paperclipai/shared";
+import type { CompanyPortabilityManifest } from "@sprintai/shared";
 
 // ── YAML frontmatter parser (minimal, no deps) ──────────────────
 
@@ -96,10 +96,10 @@ function parseFrontmatter(content: string): { data: Record<string, unknown>; bod
 // ── Slug to role mapping ─────────────────────────────────────────
 
 const SLUG_TO_ROLE: Record<string, string> = {
-  ceo: "ceo",
-  cto: "cto",
-  cmo: "cmo",
-  cfo: "cfo",
+  ceo: "scrum_master",
+  cto: "engineer",
+  cmo: "pm",
+  cfo: "pm",
   coo: "coo",
 };
 
@@ -109,10 +109,10 @@ function inferRole(slug: string, title: string | null): string {
 
   // Check title for C-suite
   const t = (title || "").toLowerCase();
-  if (t.includes("chief executive")) return "ceo";
-  if (t.includes("chief technology")) return "cto";
-  if (t.includes("chief marketing")) return "cmo";
-  if (t.includes("chief financial")) return "cfo";
+  if (t.includes("chief executive")) return "scrum_master";
+  if (t.includes("chief technology")) return "engineer";
+  if (t.includes("chief marketing")) return "pm";
+  if (t.includes("chief financial")) return "pm";
   if (t.includes("chief operating")) return "coo";
   if (t.includes("vp") || t.includes("vice president")) return "vp";
   if (t.includes("manager")) return "manager";

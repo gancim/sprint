@@ -16,7 +16,7 @@ import {
   heartbeatRunEvents,
   heartbeatRuns,
   issues,
-} from "@paperclipai/db";
+} from "@sprintai/db";
 import { runningProcesses } from "../adapters/index.ts";
 import { heartbeatService } from "../services/heartbeat.ts";
 
@@ -63,13 +63,13 @@ async function getAvailablePort(): Promise<number> {
 }
 
 async function startTempDatabase() {
-  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-heartbeat-recovery-"));
+  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "sprint-heartbeat-recovery-"));
   const port = await getAvailablePort();
   const EmbeddedPostgres = await getEmbeddedPostgresCtor();
   const instance = new EmbeddedPostgres({
     databaseDir: dataDir,
-    user: "paperclip",
-    password: "paperclip",
+    user: "sprint",
+    password: "sprint",
     port,
     persistent: true,
     initdbFlags: ["--encoding=UTF8", "--locale=C", "--lc-messages=C"],
@@ -79,9 +79,9 @@ async function startTempDatabase() {
   await instance.initialise();
   await instance.start();
 
-  const adminConnectionString = `postgres://paperclip:paperclip@127.0.0.1:${port}/postgres`;
-  await ensurePostgresDatabase(adminConnectionString, "paperclip");
-  const connectionString = `postgres://paperclip:paperclip@127.0.0.1:${port}/paperclip`;
+  const adminConnectionString = `postgres://sprint:sprint@127.0.0.1:${port}/postgres`;
+  await ensurePostgresDatabase(adminConnectionString, "sprint");
+  const connectionString = `postgres://sprint:sprint@127.0.0.1:${port}/sprint`;
   await applyPendingMigrations(connectionString);
   return { connectionString, instance, dataDir };
 }
@@ -150,7 +150,7 @@ describe("heartbeat orphaned process recovery", () => {
 
     await db.insert(companies).values({
       id: companyId,
-      name: "Paperclip",
+      name: "Sprint",
       issuePrefix,
       requireBoardApprovalForNewAgents: false,
     });

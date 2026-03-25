@@ -28,9 +28,7 @@ export interface CompanyPortabilityCompanyManifestEntry {
   path: string;
   name: string;
   description: string | null;
-  brandColor: string | null;
   logoPath: string | null;
-  requireBoardApprovalForNewAgents: boolean;
 }
 
 export interface CompanyPortabilitySidebarOrder {
@@ -118,7 +116,6 @@ export interface CompanyPortabilityAgentManifestEntry {
   adapterConfig: Record<string, unknown>;
   runtimeConfig: Record<string, unknown>;
   permissions: Record<string, unknown>;
-  budgetMonthlyCents: number;
   metadata: Record<string, unknown> | null;
 }
 
@@ -162,7 +159,7 @@ export interface CompanyPortabilityExportResult {
   manifest: CompanyPortabilityManifest;
   files: Record<string, CompanyPortabilityFileEntry>;
   warnings: string[];
-  paperclipExtensionPath: string;
+  sprintExtensionPath: string;
 }
 
 export interface CompanyPortabilityExportPreviewFile {
@@ -183,7 +180,7 @@ export interface CompanyPortabilityExportPreviewResult {
     issues: number;
   };
   warnings: string[];
-  paperclipExtensionPath: string;
+  sprintExtensionPath: string;
 }
 
 export type CompanyPortabilitySource =

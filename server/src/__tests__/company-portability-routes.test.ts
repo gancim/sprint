@@ -94,16 +94,16 @@ describe("company portability routes", () => {
     mockAgentService.getById.mockResolvedValue({
       id: "agent-1",
       companyId: "11111111-1111-4111-8111-111111111111",
-      role: "ceo",
+      role: "scrum_master",
     });
     mockCompanyPortabilityService.previewExport.mockResolvedValue({
-      rootPath: "paperclip",
+      rootPath: "sprint",
       manifest: { agents: [], skills: [], projects: [], issues: [], envInputs: [], includes: { company: true, agents: true, projects: true, issues: false, skills: false }, company: null, schemaVersion: 1, generatedAt: new Date().toISOString(), source: null },
       files: {},
       fileInventory: [],
       counts: { files: 0, agents: 0, skills: 0, projects: 0, issues: 0 },
       warnings: [],
-      paperclipExtensionPath: ".paperclip.yaml",
+      sprintExtensionPath: ".sprint.yaml",
     });
     const app = await createApp({
       type: "agent",
@@ -127,7 +127,7 @@ describe("company portability routes", () => {
     mockAgentService.getById.mockResolvedValue({
       id: "agent-1",
       companyId: "11111111-1111-4111-8111-111111111111",
-      role: "ceo",
+      role: "scrum_master",
     });
     const app = await createApp({
       type: "agent",

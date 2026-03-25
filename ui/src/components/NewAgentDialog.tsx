@@ -96,7 +96,7 @@ export function NewAgentDialog() {
     enabled: !!selectedCompanyId && newAgentOpen,
   });
 
-  const ceoAgent = (agents ?? []).find((a) => a.role === "ceo");
+  const ceoAgent = (agents ?? []).find((a) => a.role === "scrum_master");
 
   function handleAskCeo() {
     closeNewAgent();

@@ -8,7 +8,7 @@ import type {
   CompanyPortabilityPreviewRequest,
   CompanyPortabilityPreviewResult,
   UpdateCompanyBranding,
-} from "@paperclipai/shared";
+} from "@sprintai/shared";
 import { api } from "./client";
 
 export type CompanyStats = Record<string, { agentCount: number; issueCount: number }>;
@@ -20,7 +20,6 @@ export const companiesApi = {
   create: (data: {
     name: string;
     description?: string | null;
-    budgetMonthlyCents?: number;
   }) =>
     api.post<Company>("/companies", data),
   update: (
@@ -28,7 +27,7 @@ export const companiesApi = {
     data: Partial<
       Pick<
         Company,
-        "name" | "description" | "status" | "budgetMonthlyCents" | "requireBoardApprovalForNewAgents" | "brandColor" | "logoAssetId"
+        "name" | "description" | "status"
       >
     >,
   ) => api.patch<Company>(`/companies/${companyId}`, data),

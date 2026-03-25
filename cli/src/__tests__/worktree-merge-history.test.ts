@@ -22,7 +22,7 @@ function makeIssue(overrides: Record<string, unknown> = {}) {
     createdByAgentId: null,
     createdByUserId: "local-board",
     issueNumber: 1,
-    identifier: "PAP-1",
+    identifier: "SPR-1",
     requestDepth: 0,
     billingCode: null,
     assigneeAdapterOverrides: null,
@@ -168,24 +168,24 @@ describe("worktree merge history planner", () => {
   });
 
   it("dedupes nested worktree issues by preserved source uuid", () => {
-    const sharedIssue = makeIssue({ id: "issue-a", identifier: "PAP-10", title: "Shared" });
+    const sharedIssue = makeIssue({ id: "issue-a", identifier: "SPR-10", title: "Shared" });
     const branchOneIssue = makeIssue({
       id: "issue-b",
-      identifier: "PAP-22",
+      identifier: "SPR-22",
       title: "Branch one issue",
       createdAt: new Date("2026-03-20T01:00:00.000Z"),
     });
     const branchTwoIssue = makeIssue({
       id: "issue-c",
-      identifier: "PAP-23",
+      identifier: "SPR-23",
       title: "Branch two issue",
       createdAt: new Date("2026-03-20T02:00:00.000Z"),
     });
 
     const plan = buildWorktreeMergePlan({
       companyId: "company-1",
-      companyName: "Paperclip",
-      issuePrefix: "PAP",
+      companyName: "Sprint",
+      issuePrefix: "SPR",
       previewIssueCounterStart: 500,
       scopes: ["issues", "comments"],
       sourceIssues: [sharedIssue, branchOneIssue, branchTwoIssue],
@@ -201,21 +201,21 @@ describe("worktree merge history planner", () => {
     expect(plan.counts.issuesToInsert).toBe(1);
     expect(plan.issuePlans.filter((item) => item.action === "insert").map((item) => item.source.id)).toEqual(["issue-c"]);
     expect(plan.issuePlans.find((item) => item.source.id === "issue-c" && item.action === "insert")).toMatchObject({
-      previewIdentifier: "PAP-501",
+      previewIdentifier: "SPR-501",
     });
   });
 
   it("clears missing references and coerces in_progress without an assignee", () => {
     const plan = buildWorktreeMergePlan({
       companyId: "company-1",
-      companyName: "Paperclip",
-      issuePrefix: "PAP",
+      companyName: "Sprint",
+      issuePrefix: "SPR",
       previewIssueCounterStart: 10,
       scopes: ["issues"],
       sourceIssues: [
         makeIssue({
           id: "issue-x",
-          identifier: "PAP-99",
+          identifier: "SPR-99",
           status: "in_progress",
           assigneeAgentId: "agent-missing",
           projectId: "project-missing",
@@ -250,14 +250,14 @@ describe("worktree merge history planner", () => {
   it("applies an explicit project mapping override instead of clearing the project", () => {
     const plan = buildWorktreeMergePlan({
       companyId: "company-1",
-      companyName: "Paperclip",
-      issuePrefix: "PAP",
+      companyName: "Sprint",
+      issuePrefix: "SPR",
       previewIssueCounterStart: 10,
       scopes: ["issues"],
       sourceIssues: [
         makeIssue({
           id: "issue-project-map",
-          identifier: "PAP-77",
+          identifier: "SPR-77",
           projectId: "source-project-1",
           projectWorkspaceId: "source-workspace-1",
         }),
@@ -285,26 +285,26 @@ describe("worktree merge history planner", () => {
   it("plans selected project imports and preserves project workspace links", () => {
     const sourceProject = makeProject({
       id: "source-project-1",
-      name: "Paperclip Evals",
+      name: "Sprint Evals",
       goalId: "goal-1",
     });
     const sourceWorkspace = makeProjectWorkspace({
       id: "source-workspace-1",
       projectId: "source-project-1",
-      cwd: "/Users/dotta/paperclip-evals",
-      repoUrl: "https://github.com/paperclipai/paperclip-evals.git",
+      cwd: "/Users/dotta/sprint-evals",
+      repoUrl: "https://github.com/sprintai/sprint-evals.git",
     });
 
     const plan = buildWorktreeMergePlan({
       companyId: "company-1",
-      companyName: "Paperclip",
-      issuePrefix: "PAP",
+      companyName: "Sprint",
+      issuePrefix: "SPR",
       previewIssueCounterStart: 10,
       scopes: ["issues"],
       sourceIssues: [
         makeIssue({
           id: "issue-project-import",
-          identifier: "PAP-88",
+          identifier: "SPR-88",
           projectId: "source-project-1",
           projectWorkspaceId: "source-workspace-1",
         }),
@@ -323,7 +323,7 @@ describe("worktree merge history planner", () => {
 
     expect(plan.counts.projectsToImport).toBe(1);
     expect(plan.projectImports[0]).toMatchObject({
-      source: { id: "source-project-1", name: "Paperclip Evals" },
+      source: { id: "source-project-1", name: "Sprint Evals" },
       targetGoalId: "goal-1",
       workspaces: [{ id: "source-workspace-1" }],
     });
@@ -332,15 +332,15 @@ describe("worktree merge history planner", () => {
     expect(insert.targetProjectId).toBe("source-project-1");
     expect(insert.targetProjectWorkspaceId).toBe("source-workspace-1");
     expect(insert.projectResolution).toBe("imported");
-    expect(insert.mappedProjectName).toBe("Paperclip Evals");
+    expect(insert.mappedProjectName).toBe("Sprint Evals");
     expect(insert.adjustments).toEqual([]);
   });
 
   it("imports comments onto shared or newly imported issues while skipping existing comments", () => {
-    const sharedIssue = makeIssue({ id: "issue-a", identifier: "PAP-10" });
+    const sharedIssue = makeIssue({ id: "issue-a", identifier: "SPR-10" });
     const newIssue = makeIssue({
       id: "issue-b",
-      identifier: "PAP-11",
+      identifier: "SPR-11",
       createdAt: new Date("2026-03-20T01:00:00.000Z"),
     });
     const existingComment = makeComment({ id: "comment-existing", issueId: "issue-a" });
@@ -354,8 +354,8 @@ describe("worktree merge history planner", () => {
 
     const plan = buildWorktreeMergePlan({
       companyId: "company-1",
-      companyName: "Paperclip",
-      issuePrefix: "PAP",
+      companyName: "Sprint",
+      issuePrefix: "SPR",
       previewIssueCounterStart: 10,
       scopes: ["issues", "comments"],
       sourceIssues: [sharedIssue, newIssue],
@@ -378,7 +378,7 @@ describe("worktree merge history planner", () => {
   });
 
   it("merges document revisions onto an existing shared document and renumbers conflicts", () => {
-    const sharedIssue = makeIssue({ id: "issue-a", identifier: "PAP-10" });
+    const sharedIssue = makeIssue({ id: "issue-a", identifier: "SPR-10" });
     const sourceDocument = makeIssueDocument({
       issueId: "issue-a",
       documentId: "document-a",
@@ -416,8 +416,8 @@ describe("worktree merge history planner", () => {
 
     const plan = buildWorktreeMergePlan({
       companyId: "company-1",
-      companyName: "Paperclip",
-      issuePrefix: "PAP",
+      companyName: "Sprint",
+      issuePrefix: "SPR",
       previewIssueCounterStart: 10,
       scopes: ["issues", "comments"],
       sourceIssues: [sharedIssue],
@@ -452,7 +452,7 @@ describe("worktree merge history planner", () => {
   });
 
   it("imports attachments while clearing missing comment and author references", () => {
-    const sharedIssue = makeIssue({ id: "issue-a", identifier: "PAP-10" });
+    const sharedIssue = makeIssue({ id: "issue-a", identifier: "SPR-10" });
     const attachment = makeAttachment({
       issueId: "issue-a",
       issueCommentId: "comment-missing",
@@ -461,8 +461,8 @@ describe("worktree merge history planner", () => {
 
     const plan = buildWorktreeMergePlan({
       companyId: "company-1",
-      companyName: "Paperclip",
-      issuePrefix: "PAP",
+      companyName: "Sprint",
+      issuePrefix: "SPR",
       previewIssueCounterStart: 10,
       scopes: ["issues"],
       sourceIssues: [sharedIssue],

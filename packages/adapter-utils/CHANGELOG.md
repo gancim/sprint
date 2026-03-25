@@ -1,4 +1,4 @@
-# @paperclipai/adapter-utils
+# @sprintai/adapter-utils
 
 ## 0.3.1
 

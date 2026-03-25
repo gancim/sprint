@@ -33,9 +33,7 @@ export const portabilityCompanyManifestEntrySchema = z.object({
   path: z.string().min(1),
   name: z.string().min(1),
   description: z.string().nullable(),
-  brandColor: z.string().nullable(),
   logoPath: z.string().nullable(),
-  requireBoardApprovalForNewAgents: z.boolean(),
 });
 
 export const portabilitySidebarOrderSchema = z.object({
@@ -57,7 +55,6 @@ export const portabilityAgentManifestEntrySchema = z.object({
   adapterConfig: z.record(z.unknown()),
   runtimeConfig: z.record(z.unknown()),
   permissions: z.record(z.unknown()),
-  budgetMonthlyCents: z.number().int().nonnegative(),
   metadata: z.record(z.unknown()).nullable(),
 });
 

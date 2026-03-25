@@ -29,30 +29,30 @@ FROM base AS build
 WORKDIR /app
 COPY --from=deps /app /app
 COPY . .
-RUN pnpm --filter @paperclipai/ui build
-RUN pnpm --filter @paperclipai/plugin-sdk build
-RUN pnpm --filter @paperclipai/server build
+RUN pnpm --filter @sprintai/ui build
+RUN pnpm --filter @sprintai/plugin-sdk build
+RUN pnpm --filter @sprintai/server build
 RUN test -f server/dist/index.js || (echo "ERROR: server build output missing" && exit 1)
 
 FROM base AS production
 WORKDIR /app
 COPY --chown=node:node --from=build /app /app
 RUN npm install --global --omit=dev @anthropic-ai/claude-code@latest @openai/codex@latest opencode-ai \
-  && mkdir -p /paperclip \
-  && chown node:node /paperclip
+  && mkdir -p /sprint \
+  && chown node:node /sprint
 
 ENV NODE_ENV=production \
-  HOME=/paperclip \
+  HOME=/sprint \
   HOST=0.0.0.0 \
   PORT=3100 \
   SERVE_UI=true \
-  PAPERCLIP_HOME=/paperclip \
-  PAPERCLIP_INSTANCE_ID=default \
-  PAPERCLIP_CONFIG=/paperclip/instances/default/config.json \
-  PAPERCLIP_DEPLOYMENT_MODE=authenticated \
-  PAPERCLIP_DEPLOYMENT_EXPOSURE=private
+  SPRINT_HOME=/sprint \
+  SPRINT_INSTANCE_ID=default \
+  SPRINT_CONFIG=/sprint/instances/default/config.json \
+  SPRINT_DEPLOYMENT_MODE=authenticated \
+  SPRINT_DEPLOYMENT_EXPOSURE=private
 
-VOLUME ["/paperclip"]
+VOLUME ["/sprint"]
 EXPOSE 3100
 
 USER node

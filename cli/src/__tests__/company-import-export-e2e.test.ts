@@ -54,13 +54,13 @@ async function getAvailablePort(): Promise<number> {
 }
 
 async function startTempDatabase() {
-  const dataDir = mkdtempSync(path.join(os.tmpdir(), "paperclip-company-cli-db-"));
+  const dataDir = mkdtempSync(path.join(os.tmpdir(), "sprint-company-cli-db-"));
   const port = await getAvailablePort();
   const EmbeddedPostgres = await getEmbeddedPostgresCtor();
   const instance = new EmbeddedPostgres({
     databaseDir: dataDir,
-    user: "paperclip",
-    password: "paperclip",
+    user: "sprint",
+    password: "sprint",
     port,
     persistent: true,
     initdbFlags: ["--encoding=UTF8", "--locale=C", "--lc-messages=C"],
@@ -70,10 +70,10 @@ async function startTempDatabase() {
   await instance.initialise();
   await instance.start();
 
-  const { applyPendingMigrations, ensurePostgresDatabase } = await import("@paperclipai/db");
-  const adminConnectionString = `postgres://paperclip:paperclip@127.0.0.1:${port}/postgres`;
-  await ensurePostgresDatabase(adminConnectionString, "paperclip");
-  const connectionString = `postgres://paperclip:paperclip@127.0.0.1:${port}/paperclip`;
+  const { applyPendingMigrations, ensurePostgresDatabase } = await import("@sprintai/db");
+  const adminConnectionString = `postgres://sprint:sprint@127.0.0.1:${port}/postgres`;
+  await ensurePostgresDatabase(adminConnectionString, "sprint");
+  const connectionString = `postgres://sprint:sprint@127.0.0.1:${port}/sprint`;
   await applyPendingMigrations(connectionString);
 
   return { connectionString, dataDir, instance };
@@ -120,7 +120,7 @@ function writeTestConfig(configPath: string, tempRoot: string, port: number, con
         baseDir: path.join(tempRoot, "storage"),
       },
       s3: {
-        bucket: "paperclip",
+        bucket: "sprint",
         region: "us-east-1",
         prefix: "",
         forcePathStyle: false,
@@ -142,7 +142,7 @@ function writeTestConfig(configPath: string, tempRoot: string, port: number, con
 function createServerEnv(configPath: string, port: number, connectionString: string) {
   const env = { ...process.env };
   for (const key of Object.keys(env)) {
-    if (key.startsWith("PAPERCLIP_")) {
+    if (key.startsWith("SPRINT_")) {
       delete env[key];
     }
   }
@@ -152,15 +152,15 @@ function createServerEnv(configPath: string, port: number, connectionString: str
   delete env.SERVE_UI;
   delete env.HEARTBEAT_SCHEDULER_ENABLED;
 
-  env.PAPERCLIP_CONFIG = configPath;
+  env.SPRINT_CONFIG = configPath;
   env.DATABASE_URL = connectionString;
   env.HOST = "127.0.0.1";
   env.PORT = String(port);
   env.SERVE_UI = "false";
-  env.PAPERCLIP_DB_BACKUP_ENABLED = "false";
+  env.SPRINT_DB_BACKUP_ENABLED = "false";
   env.HEARTBEAT_SCHEDULER_ENABLED = "false";
-  env.PAPERCLIP_MIGRATION_AUTO_APPLY = "true";
-  env.PAPERCLIP_UI_DEV_MIDDLEWARE = "false";
+  env.SPRINT_MIGRATION_AUTO_APPLY = "true";
+  env.SPRINT_UI_DEV_MIDDLEWARE = "false";
 
   return env;
 }
@@ -168,7 +168,7 @@ function createServerEnv(configPath: string, port: number, connectionString: str
 function createCliEnv() {
   const env = { ...process.env };
   for (const key of Object.keys(env)) {
-    if (key.startsWith("PAPERCLIP_")) {
+    if (key.startsWith("SPRINT_")) {
       delete env[key];
     }
   }
@@ -176,10 +176,10 @@ function createCliEnv() {
   delete env.PORT;
   delete env.HOST;
   delete env.SERVE_UI;
-  delete env.PAPERCLIP_DB_BACKUP_ENABLED;
+  delete env.SPRINT_DB_BACKUP_ENABLED;
   delete env.HEARTBEAT_SCHEDULER_ENABLED;
-  delete env.PAPERCLIP_MIGRATION_AUTO_APPLY;
-  delete env.PAPERCLIP_UI_DEV_MIDDLEWARE;
+  delete env.SPRINT_MIGRATION_AUTO_APPLY;
+  delete env.SPRINT_UI_DEV_MIDDLEWARE;
   return env;
 }
 
@@ -222,7 +222,7 @@ async function runCliJson<T>(args: string[], opts: { apiBase: string; configPath
   const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
   const result = await execFileAsync(
     "pnpm",
-    ["--silent", "paperclipai", ...args, "--api-base", opts.apiBase, "--config", opts.configPath, "--json"],
+    ["--silent", "sprintai", ...args, "--api-base", opts.apiBase, "--config", opts.configPath, "--json"],
     {
       cwd: repoRoot,
       env: createCliEnv(),
@@ -246,7 +246,7 @@ async function waitForServer(
   while (Date.now() - startedAt < 30_000) {
     if (child.exitCode !== null) {
       throw new Error(
-        `paperclipai run exited before healthcheck succeeded.\nstdout:\n${output.stdout.join("")}\nstderr:\n${output.stderr.join("")}`,
+        `sprintai run exited before healthcheck succeeded.\nstdout:\n${output.stdout.join("")}\nstderr:\n${output.stderr.join("")}`,
       );
     }
 
@@ -265,7 +265,7 @@ async function waitForServer(
   );
 }
 
-describe("paperclipai company import/export e2e", () => {
+describe("sprintai company import/export e2e", () => {
   let tempRoot = "";
   let configPath = "";
   let exportDir = "";
@@ -275,7 +275,7 @@ describe("paperclipai company import/export e2e", () => {
   let dbInstance: EmbeddedPostgresInstance | null = null;
 
   beforeAll(async () => {
-    tempRoot = mkdtempSync(path.join(os.tmpdir(), "paperclip-company-cli-e2e-"));
+    tempRoot = mkdtempSync(path.join(os.tmpdir(), "sprint-company-cli-e2e-"));
     configPath = path.join(tempRoot, "config", "config.json");
     exportDir = path.join(tempRoot, "exported-company");
 
@@ -291,7 +291,7 @@ describe("paperclipai company import/export e2e", () => {
     const output = { stdout: [] as string[], stderr: [] as string[] };
     const child = spawn(
       "pnpm",
-      ["paperclipai", "run", "--config", configPath],
+      ["sprintai", "run", "--config", configPath],
       {
         cwd: repoRoot,
         env: createServerEnv(configPath, port, db.connectionString),
@@ -397,7 +397,7 @@ describe("paperclipai company import/export e2e", () => {
     expect(exportResult.ok).toBe(true);
     expect(exportResult.filesWritten).toBeGreaterThan(0);
     expect(readFileSync(path.join(exportDir, "COMPANY.md"), "utf8")).toContain(sourceCompany.name);
-    expect(readFileSync(path.join(exportDir, ".paperclip.yaml"), "utf8")).toContain('schema: "paperclip/v1"');
+    expect(readFileSync(path.join(exportDir, ".sprint.yaml"), "utf8")).toContain('schema: "sprint/v1"');
 
     const importedNew = await runCliJson<{
       company: { id: string; name: string; action: string };
@@ -516,7 +516,7 @@ describe("paperclipai company import/export e2e", () => {
     const zipPath = path.join(tempRoot, "exported-company.zip");
     const portableFiles: Record<string, string> = {};
     collectTextFiles(exportDir, exportDir, portableFiles);
-    writeFileSync(zipPath, createStoredZipArchive(portableFiles, "paperclip-demo"));
+    writeFileSync(zipPath, createStoredZipArchive(portableFiles, "sprint-demo"));
 
     const importedFromZip = await runCliJson<{
       company: { id: string; name: string; action: string };

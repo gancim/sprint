@@ -13,7 +13,7 @@ import {
   ensurePostgresDatabase,
   issueComments,
   issues,
-} from "@paperclipai/db";
+} from "@sprintai/db";
 import { issueService } from "../services/issues.ts";
 
 type EmbeddedPostgresInstance = {
@@ -59,13 +59,13 @@ async function getAvailablePort(): Promise<number> {
 }
 
 async function startTempDatabase() {
-  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "paperclip-issues-service-"));
+  const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "sprint-issues-service-"));
   const port = await getAvailablePort();
   const EmbeddedPostgres = await getEmbeddedPostgresCtor();
   const instance = new EmbeddedPostgres({
     databaseDir: dataDir,
-    user: "paperclip",
-    password: "paperclip",
+    user: "sprint",
+    password: "sprint",
     port,
     persistent: true,
     initdbFlags: ["--encoding=UTF8", "--locale=C", "--lc-messages=C"],
@@ -75,9 +75,9 @@ async function startTempDatabase() {
   await instance.initialise();
   await instance.start();
 
-  const adminConnectionString = `postgres://paperclip:paperclip@127.0.0.1:${port}/postgres`;
-  await ensurePostgresDatabase(adminConnectionString, "paperclip");
-  const connectionString = `postgres://paperclip:paperclip@127.0.0.1:${port}/paperclip`;
+  const adminConnectionString = `postgres://sprint:sprint@127.0.0.1:${port}/postgres`;
+  await ensurePostgresDatabase(adminConnectionString, "sprint");
+  const connectionString = `postgres://sprint:sprint@127.0.0.1:${port}/sprint`;
   await applyPendingMigrations(connectionString);
   return { connectionString, dataDir, instance };
 }
@@ -118,7 +118,7 @@ describe("issueService.list participantAgentId", () => {
 
     await db.insert(companies).values({
       id: companyId,
-      name: "Paperclip",
+      name: "Sprint",
       issuePrefix: `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`,
       requireBoardApprovalForNewAgents: false,
     });
@@ -235,7 +235,7 @@ describe("issueService.list participantAgentId", () => {
 
     await db.insert(companies).values({
       id: companyId,
-      name: "Paperclip",
+      name: "Sprint",
       issuePrefix: `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`,
       requireBoardApprovalForNewAgents: false,
     });

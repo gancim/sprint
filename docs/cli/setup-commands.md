@@ -5,32 +5,32 @@ summary: Onboard, run, doctor, and configure
 
 Instance setup and diagnostics commands.
 
-## `paperclipai run`
+## `sprintai run`
 
 One-command bootstrap and start:
 
 ```sh
-pnpm paperclipai run
+pnpm sprintai run
 ```
 
 Does:
 
 1. Auto-onboards if config is missing
-2. Runs `paperclipai doctor` with repair enabled
+2. Runs `sprintai doctor` with repair enabled
 3. Starts the server when checks pass
 
 Choose a specific instance:
 
 ```sh
-pnpm paperclipai run --instance dev
+pnpm sprintai run --instance dev
 ```
 
-## `paperclipai onboard`
+## `sprintai onboard`
 
 Interactive first-time setup:
 
 ```sh
-pnpm paperclipai onboard
+pnpm sprintai onboard
 ```
 
 First prompt:
@@ -41,22 +41,22 @@ First prompt:
 Start immediately after onboarding:
 
 ```sh
-pnpm paperclipai onboard --run
+pnpm sprintai onboard --run
 ```
 
 Non-interactive defaults + immediate start (opens browser on server listen):
 
 ```sh
-pnpm paperclipai onboard --yes
+pnpm sprintai onboard --yes
 ```
 
-## `paperclipai doctor`
+## `sprintai doctor`
 
 Health checks with optional auto-repair:
 
 ```sh
-pnpm paperclipai doctor
-pnpm paperclipai doctor --repair
+pnpm sprintai doctor
+pnpm sprintai doctor --repair
 ```
 
 Validates:
@@ -67,51 +67,51 @@ Validates:
 - Storage configuration
 - Missing key files
 
-## `paperclipai configure`
+## `sprintai configure`
 
 Update configuration sections:
 
 ```sh
-pnpm paperclipai configure --section server
-pnpm paperclipai configure --section secrets
-pnpm paperclipai configure --section storage
+pnpm sprintai configure --section server
+pnpm sprintai configure --section secrets
+pnpm sprintai configure --section storage
 ```
 
-## `paperclipai env`
+## `sprintai env`
 
 Show resolved environment configuration:
 
 ```sh
-pnpm paperclipai env
+pnpm sprintai env
 ```
 
-## `paperclipai allowed-hostname`
+## `sprintai allowed-hostname`
 
 Allow a private hostname for authenticated/private mode:
 
 ```sh
-pnpm paperclipai allowed-hostname my-tailscale-host
+pnpm sprintai allowed-hostname my-tailscale-host
 ```
 
 ## Local Storage Paths
 
 | Data | Default Path |
 |------|-------------|
-| Config | `~/.paperclip/instances/default/config.json` |
-| Database | `~/.paperclip/instances/default/db` |
-| Logs | `~/.paperclip/instances/default/logs` |
-| Storage | `~/.paperclip/instances/default/data/storage` |
-| Secrets key | `~/.paperclip/instances/default/secrets/master.key` |
+| Config | `~/.sprint/instances/default/config.json` |
+| Database | `~/.sprint/instances/default/db` |
+| Logs | `~/.sprint/instances/default/logs` |
+| Storage | `~/.sprint/instances/default/data/storage` |
+| Secrets key | `~/.sprint/instances/default/secrets/master.key` |
 
 Override with:
 
 ```sh
-PAPERCLIP_HOME=/custom/home PAPERCLIP_INSTANCE_ID=dev pnpm paperclipai run
+SPRINT_HOME=/custom/home SPRINT_INSTANCE_ID=dev pnpm sprintai run
 ```
 
 Or pass `--data-dir` directly on any command:
 
 ```sh
-pnpm paperclipai run --data-dir ./tmp/paperclip-dev
-pnpm paperclipai doctor --data-dir ./tmp/paperclip-dev
+pnpm sprintai run --data-dir ./tmp/sprint-dev
+pnpm sprintai doctor --data-dir ./tmp/sprint-dev
 ```

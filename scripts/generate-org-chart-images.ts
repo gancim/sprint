@@ -29,7 +29,7 @@ const ORGS: Record<string, OrgNode> = {
     name: "CEO",
     role: "Chief Executive",
     icon: "👑",
-    tag: "ceo",
+    tag: "scrum_master",
     children: [
       { name: "Engineer", role: "Engineer", icon: "⌨️", tag: "eng" },
       { name: "Designer", role: "Design", icon: "🪄", tag: "des" },
@@ -39,13 +39,13 @@ const ORGS: Record<string, OrgNode> = {
     name: "CEO",
     role: "Chief Executive",
     icon: "👑",
-    tag: "ceo",
+    tag: "scrum_master",
     children: [
       {
         name: "CTO",
         role: "Technology",
         icon: "💻",
-        tag: "cto",
+        tag: "engineer",
         children: [
           { name: "ClaudeCoder", role: "Engineer", tag: "eng" },
           { name: "CodexCoder", role: "Engineer", tag: "eng" },
@@ -58,7 +58,7 @@ const ORGS: Record<string, OrgNode> = {
         name: "CMO",
         role: "Marketing",
         icon: "🌐",
-        tag: "cmo",
+        tag: "pm",
         children: [{ name: "Designer", role: "Design", tag: "des" }],
       },
     ],
@@ -67,13 +67,13 @@ const ORGS: Record<string, OrgNode> = {
     name: "CEO",
     role: "Chief Executive",
     icon: "👑",
-    tag: "ceo",
+    tag: "scrum_master",
     children: [
       {
         name: "CTO",
         role: "Technology",
         icon: "💻",
-        tag: "cto",
+        tag: "engineer",
         children: [
           { name: "Eng 1", role: "Eng", tag: "eng" },
           { name: "Eng 2", role: "Eng", tag: "eng" },
@@ -85,7 +85,7 @@ const ORGS: Record<string, OrgNode> = {
         name: "CMO",
         role: "Marketing",
         icon: "🌐",
-        tag: "cmo",
+        tag: "pm",
         children: [
           { name: "Designer", role: "Design", tag: "des" },
           { name: "Content", role: "Writer", tag: "eng" },
@@ -117,10 +117,10 @@ const ORGS: Record<string, OrgNode> = {
 const OG_ORG: OrgNode = {
   name: "CEO",
   role: "Chief Executive",
-  tag: "ceo",
+  tag: "scrum_master",
   children: [
-    { name: "CTO", role: "×5 reports", tag: "cto" },
-    { name: "CMO", role: "×1 report", tag: "cmo" },
+    { name: "CTO", role: "×5 reports", tag: "engineer" },
+    { name: "CMO", role: "×1 report", tag: "pm" },
   ],
 };
 
@@ -367,7 +367,7 @@ body { background: #0c0c0e; }
 .watermark svg { stroke: rgba(99,102,241,0.3); }
 `,
     renderCard: (node, isOg) => {
-      const cls = node.tag === "ceo" ? " chief" : "";
+      const cls = node.tag === "scrum_master" ? " chief" : "";
       const icon =
         node.icon && !isOg
           ? `<div class="icon-wrap">${node.icon}</div>`
@@ -539,11 +539,11 @@ function renderTree(
   return `<div class="org-tree${compact}">${renderNode(orgData, style, isOg)}</div>`;
 }
 
-const PAPERCLIP_WATERMARK = `<div class="watermark">
+const SPRINT_WATERMARK = `<div class="watermark">
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="m18 4-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551"/>
   </svg>
-  Paperclip
+  Sprint
 </div>`;
 
 function buildHtml(
@@ -559,7 +559,7 @@ function buildHtml(
 </head><body>
 <div style="position:relative;display:inline-block;">
 ${tree}
-${PAPERCLIP_WATERMARK}
+${SPRINT_WATERMARK}
 </div>
 </body></html>`;
 }

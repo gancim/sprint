@@ -1,7 +1,7 @@
 ---
 name: design-guide
 description: >
-  Paperclip UI design system guide for building consistent, reusable frontend
+  Sprint UI design system guide for building consistent, reusable frontend
   components. Use when creating new UI components, modifying existing ones,
   adding pages or features to the frontend, styling UI elements, or when you
   need to understand the design language and conventions. Covers: component
@@ -11,9 +11,9 @@ description: >
   web-design-guidelines skill (for web best practices).
 ---
 
-# Paperclip Design Guide
+# Sprint Design Guide
 
-Paperclip's UI is a professional-grade control plane — dense, keyboard-driven, dark-themed by default. Every pixel earns its place.
+Sprint's UI is a professional-grade control plane — dense, keyboard-driven, dark-themed by default. Every pixel earns its place.
 
 **Always use with:** `frontend-design` (visual polish) and `web-design-guidelines` (web best practices).
 
@@ -94,7 +94,7 @@ Use these exact patterns — do not invent new ones:
 | Body | `text-sm` | Default body text |
 | Muted | `text-sm text-muted-foreground` | Descriptions, secondary text |
 | Tiny label | `text-xs text-muted-foreground` | Metadata, timestamps, property labels |
-| Mono identifier | `text-xs font-mono text-muted-foreground` | Issue keys (PAP-001), CSS vars |
+| Mono identifier | `text-xs font-mono text-muted-foreground` | Issue keys (SPR-001), CSS vars |
 | Large stat | `text-2xl font-bold` | Dashboard metric values |
 | Code/log | `font-mono text-xs` | Log output, code snippets |
 
@@ -133,7 +133,7 @@ Inline colored dots: running (cyan, animate-pulse), active (green), paused (yell
 Three tiers:
 
 1. **shadcn/ui primitives** (`ui/src/components/ui/`) — Button, Card, Input, Badge, Dialog, Tabs, etc. Do not modify these directly; extend via composition.
-2. **Custom composites** (`ui/src/components/`) — StatusBadge, EntityRow, MetricCard, etc. These capture Paperclip-specific design language.
+2. **Custom composites** (`ui/src/components/`) — StatusBadge, EntityRow, MetricCard, etc. These capture Sprint-specific design language.
 3. **Page components** (`ui/src/pages/`) — Compose primitives and composites into full views.
 
 **See [references/component-index.md](references/component-index.md) for the complete component inventory with usage guidance.**
@@ -163,7 +163,7 @@ The standard list item for issues and similar entities:
 ```tsx
 <EntityRow
   leading={<><StatusIcon status="in_progress" /><PriorityIcon priority="high" /></>}
-  identifier="PAP-001"
+  identifier="SPR-001"
   title="Implement authentication flow"
   subtitle="Assigned to Agent Alpha"
   trailing={<StatusBadge status="in_progress" />}

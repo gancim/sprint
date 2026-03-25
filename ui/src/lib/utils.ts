@@ -1,7 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { deriveAgentUrlKey, deriveProjectUrlKey } from "@paperclipai/shared";
-import type { BillingType, FinanceDirection, FinanceEventKind } from "@paperclipai/shared";
+import { deriveAgentUrlKey, deriveProjectUrlKey } from "@sprintai/shared";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -63,18 +62,6 @@ export function providerDisplayName(provider: string): string {
   return map[provider.toLowerCase()] ?? provider;
 }
 
-export function billingTypeDisplayName(billingType: BillingType): string {
-  const map: Record<BillingType, string> = {
-    metered_api: "Metered API",
-    subscription_included: "Subscription",
-    subscription_overage: "Subscription overage",
-    credits: "Credits",
-    fixed: "Fixed",
-    unknown: "Unknown",
-  };
-  return map[billingType];
-}
-
 export function quotaSourceDisplayName(source: string): string {
   const map: Record<string, string> = {
     "anthropic-oauth": "Anthropic OAuth",
@@ -85,18 +72,8 @@ export function quotaSourceDisplayName(source: string): string {
   return map[source] ?? source;
 }
 
-function coerceBillingType(value: unknown): BillingType | null {
-  if (
-    value === "metered_api" ||
-    value === "subscription_included" ||
-    value === "subscription_overage" ||
-    value === "credits" ||
-    value === "fixed" ||
-    value === "unknown"
-  ) {
-    return value;
-  }
-  return null;
+function coerceBillingTypeSubscriptionIncluded(value: unknown): boolean {
+  return value === "subscription_included";
 }
 
 function readRunCostUsd(payload: Record<string, unknown> | null): number {
@@ -112,33 +89,11 @@ export function visibleRunCostUsd(
   usage: Record<string, unknown> | null,
   result: Record<string, unknown> | null = null,
 ): number {
-  const billingType = coerceBillingType(usage?.billingType) ?? coerceBillingType(result?.billingType);
-  if (billingType === "subscription_included") return 0;
+  if (
+    coerceBillingTypeSubscriptionIncluded(usage?.billingType) ||
+    coerceBillingTypeSubscriptionIncluded(result?.billingType)
+  ) return 0;
   return readRunCostUsd(usage) || readRunCostUsd(result);
-}
-
-export function financeEventKindDisplayName(eventKind: FinanceEventKind): string {
-  const map: Record<FinanceEventKind, string> = {
-    inference_charge: "Inference charge",
-    platform_fee: "Platform fee",
-    credit_purchase: "Credit purchase",
-    credit_refund: "Credit refund",
-    credit_expiry: "Credit expiry",
-    byok_fee: "BYOK fee",
-    gateway_overhead: "Gateway overhead",
-    log_storage_charge: "Log storage",
-    logpush_charge: "Logpush",
-    provisioned_capacity_charge: "Provisioned capacity",
-    training_charge: "Training",
-    custom_model_import_charge: "Custom model import",
-    custom_model_storage_charge: "Custom model storage",
-    manual_adjustment: "Manual adjustment",
-  };
-  return map[eventKind];
-}
-
-export function financeDirectionDisplayName(direction: FinanceDirection): string {
-  return direction === "credit" ? "Credit" : "Debit";
 }
 
 /** Build an issue URL using the human-readable identifier when available. */

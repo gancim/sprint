@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Company } from "@paperclipai/shared";
+import type { Company } from "@sprintai/shared";
 import { assertDeleteConfirmation, resolveCompanyForDeletion } from "../commands/client/company.js";
 
 function makeCompany(overrides: Partial<Company>): Company {
@@ -33,14 +33,14 @@ describe("resolveCompanyForDeletion", () => {
     }),
     makeCompany({
       id: "22222222-2222-2222-2222-222222222222",
-      name: "Paperclip",
-      issuePrefix: "PAP",
+      name: "Sprint",
+      issuePrefix: "SPR",
     }),
   ];
 
   it("resolves by ID in auto mode", () => {
     const result = resolveCompanyForDeletion(companies, "22222222-2222-2222-2222-222222222222", "auto");
-    expect(result.issuePrefix).toBe("PAP");
+    expect(result.issuePrefix).toBe("SPR");
   });
 
   it("resolves by prefix in auto mode", () => {
@@ -53,7 +53,7 @@ describe("resolveCompanyForDeletion", () => {
   });
 
   it("respects explicit id mode", () => {
-    expect(() => resolveCompanyForDeletion(companies, "PAP", "id")).toThrow(/No company found by ID/);
+    expect(() => resolveCompanyForDeletion(companies, "SPR", "id")).toThrow(/No company found by ID/);
   });
 
   it("respects explicit prefix mode", () => {
@@ -65,11 +65,11 @@ describe("resolveCompanyForDeletion", () => {
 describe("assertDeleteConfirmation", () => {
   const company = makeCompany({
     id: "22222222-2222-2222-2222-222222222222",
-    issuePrefix: "PAP",
+    issuePrefix: "SPR",
   });
 
   it("requires --yes", () => {
-    expect(() => assertDeleteConfirmation(company, { confirm: "PAP" })).toThrow(/requires --yes/);
+    expect(() => assertDeleteConfirmation(company, { confirm: "SPR" })).toThrow(/requires --yes/);
   });
 
   it("accepts matching prefix confirmation", () => {

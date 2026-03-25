@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from "express";
 import multer from "multer";
-import type { Db } from "@paperclipai/db";
+import type { Db } from "@sprintai/db";
 import {
   addIssueCommentSchema,
   createIssueAttachmentMetadataSchema,
@@ -13,7 +13,7 @@ import {
   updateIssueWorkProductSchema,
   upsertIssueDocumentSchema,
   updateIssueSchema,
-} from "@paperclipai/shared";
+} from "@sprintai/shared";
 import type { StorageService } from "../storage/types.js";
 import { validate } from "../middleware/validate.js";
 import {
@@ -85,13 +85,13 @@ export function issueRoutes(db: Db, storage: StorageService) {
       res.status(403).json({ error: "Forbidden" });
       return false;
     }
-    if (actorAgent.role === "ceo" || Boolean(actorAgent.permissions?.canCreateAgents)) return true;
+    if (actorAgent.role === "scrum_master" || Boolean(actorAgent.permissions?.canCreateAgents)) return true;
     res.status(403).json({ error: "Missing permission to link approvals" });
     return false;
   }
 
   function canCreateAgentsLegacy(agent: { permissions: Record<string, unknown> | null | undefined; role: string }) {
-    if (agent.role === "ceo") return true;
+    if (agent.role === "scrum_master") return true;
     if (!agent.permissions || typeof agent.permissions !== "object") return false;
     return Boolean((agent.permissions as Record<string, unknown>).canCreateAgents);
   }
@@ -198,7 +198,7 @@ export function issueRoutes(db: Db, storage: StorageService) {
     return { project, goal: null };
   }
 
-  // Resolve issue identifiers (e.g. "PAP-39") to UUIDs for all /issues/:id routes
+  // Resolve issue identifiers (e.g. "SPR-39") to UUIDs for all /issues/:id routes
   router.param("id", async (req, res, next, rawId) => {
     try {
       req.params.id = await normalizeIssueIdentifier(rawId);
@@ -208,7 +208,7 @@ export function issueRoutes(db: Db, storage: StorageService) {
     }
   });
 
-  // Resolve issue identifiers (e.g. "PAP-39") to UUIDs for company-scoped attachment routes.
+  // Resolve issue identifiers (e.g. "SPR-39") to UUIDs for company-scoped attachment routes.
   router.param("issueId", async (req, res, next, rawId) => {
     try {
       req.params.issueId = await normalizeIssueIdentifier(rawId);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { CompanyPortabilityPreviewResult } from "@paperclipai/shared";
+import type { CompanyPortabilityPreviewResult } from "@sprintai/shared";
 import {
   buildCompanyDashboardUrl,
   buildDefaultImportAdapterOverrides,
@@ -104,8 +104,8 @@ describe("resolveCompanyImportApplyConfirmationMode", () => {
 
 describe("buildCompanyDashboardUrl", () => {
   it("preserves the configured base path when building a dashboard URL", () => {
-    expect(buildCompanyDashboardUrl("https://paperclip.example/app/", "PAP")).toBe(
-      "https://paperclip.example/app/PAP/dashboard",
+    expect(buildCompanyDashboardUrl("https://sprint.example/app/", "SPR")).toBe(
+      "https://sprint.example/app/PAP/dashboard",
     );
   });
 });
@@ -123,12 +123,12 @@ describe("renderCompanyImportPreview", () => {
       targetCompanyId: "company-123",
       targetCompanyName: "Imported Co",
       collisionStrategy: "rename",
-      selectedAgentSlugs: ["ceo", "cto", "eng-1", "eng-2", "eng-3", "eng-4", "eng-5"],
+      selectedAgentSlugs: ["scrum_master", "engineer", "eng-1", "eng-2", "eng-3", "eng-4", "eng-5"],
       plan: {
         companyAction: "update",
         agentPlans: [
-          { slug: "ceo", action: "create", plannedName: "CEO", existingAgentId: null, reason: null },
-          { slug: "cto", action: "update", plannedName: "CTO", existingAgentId: "agent-2", reason: "replace strategy" },
+          { slug: "scrum_master", action: "create", plannedName: "CEO", existingAgentId: null, reason: null },
+          { slug: "engineer", action: "update", plannedName: "CTO", existingAgentId: "agent-2", reason: "replace strategy" },
           { slug: "eng-1", action: "skip", plannedName: "Engineer 1", existingAgentId: "agent-3", reason: "skip strategy" },
           { slug: "eng-2", action: "create", plannedName: "Engineer 2", existingAgentId: null, reason: null },
           { slug: "eng-3", action: "create", plannedName: "Engineer 3", existingAgentId: null, reason: null },
@@ -165,16 +165,16 @@ describe("renderCompanyImportPreview", () => {
           requireBoardApprovalForNewAgents: false,
         },
         sidebar: {
-          agents: ["ceo"],
+          agents: ["scrum_master"],
           projects: ["alpha"],
         },
         agents: [
           {
-            slug: "ceo",
+            slug: "scrum_master",
             name: "CEO",
             path: "agents/ceo/AGENT.md",
             skills: [],
-            role: "ceo",
+            role: "scrum_master",
             title: null,
             icon: null,
             capabilities: null,
@@ -227,7 +227,7 @@ describe("renderCompanyImportPreview", () => {
             path: "projects/alpha/issues/kickoff/TASK.md",
             projectSlug: "alpha",
             projectWorkspaceKey: null,
-            assigneeAgentSlug: "ceo",
+            assigneeAgentSlug: "scrum_master",
             description: null,
             recurring: false,
             routine: null,
@@ -245,7 +245,7 @@ describe("renderCompanyImportPreview", () => {
           {
             key: "OPENAI_API_KEY",
             description: null,
-            agentSlug: "ceo",
+            agentSlug: "scrum_master",
             kind: "secret",
             requirement: "required",
             defaultValue: null,
@@ -260,7 +260,7 @@ describe("renderCompanyImportPreview", () => {
         {
           key: "OPENAI_API_KEY",
           description: null,
-          agentSlug: "ceo",
+          agentSlug: "scrum_master",
           kind: "secret",
           requirement: "required",
           defaultValue: null,
@@ -272,7 +272,7 @@ describe("renderCompanyImportPreview", () => {
     };
 
     const rendered = renderCompanyImportPreview(preview, {
-      sourceLabel: "GitHub: https://github.com/paperclipai/companies/demo",
+      sourceLabel: "GitHub: https://github.com/sprintai/companies/demo",
       targetLabel: "Imported Co (company-123)",
       infoMessages: ["Using claude-local adapter"],
     });
@@ -300,8 +300,8 @@ describe("renderCompanyImportResult", () => {
           action: "updated",
         },
         agents: [
-          { slug: "ceo", id: "agent-1", action: "created", name: "CEO", reason: null },
-          { slug: "cto", id: "agent-2", action: "updated", name: "CTO", reason: "replace strategy" },
+          { slug: "scrum_master", id: "agent-1", action: "created", name: "CEO", reason: null },
+          { slug: "engineer", id: "agent-2", action: "updated", name: "CTO", reason: "replace strategy" },
           { slug: "ops", id: null, action: "skipped", name: "Ops", reason: "skip strategy" },
         ],
         projects: [
@@ -314,13 +314,13 @@ describe("renderCompanyImportResult", () => {
       },
       {
         targetLabel: "Imported Co (company-123)",
-        companyUrl: "https://paperclip.example/PAP/dashboard",
+        companyUrl: "https://sprint.example/PAP/dashboard",
         infoMessages: ["Using claude-local adapter"],
       },
     );
 
     expect(rendered).toContain("Company");
-    expect(rendered).toContain("https://paperclip.example/PAP/dashboard");
+    expect(rendered).toContain("https://sprint.example/PAP/dashboard");
     expect(rendered).toContain("3 agents total (1 created, 1 updated, 1 skipped)");
     expect(rendered).toContain("3 projects total (1 created, 1 updated, 1 skipped)");
     expect(rendered).toContain("Agent results");
@@ -343,7 +343,7 @@ describe("import selection catalog", () => {
       targetCompanyId: "company-123",
       targetCompanyName: "Imported Co",
       collisionStrategy: "rename",
-      selectedAgentSlugs: ["ceo"],
+      selectedAgentSlugs: ["scrum_master"],
       plan: {
         companyAction: "create",
         agentPlans: [],
@@ -373,16 +373,16 @@ describe("import selection catalog", () => {
           requireBoardApprovalForNewAgents: false,
         },
         sidebar: {
-          agents: ["ceo"],
+          agents: ["scrum_master"],
           projects: ["alpha"],
         },
         agents: [
           {
-            slug: "ceo",
+            slug: "scrum_master",
             name: "CEO",
             path: "agents/ceo/AGENT.md",
             skills: [],
-            role: "ceo",
+            role: "scrum_master",
             title: null,
             icon: null,
             capabilities: null,
@@ -435,7 +435,7 @@ describe("import selection catalog", () => {
             path: "projects/alpha/issues/kickoff/TASK.md",
             projectSlug: "alpha",
             projectWorkspaceKey: null,
-            assigneeAgentSlug: "ceo",
+            assigneeAgentSlug: "scrum_master",
             description: null,
             recurring: false,
             routine: null,
@@ -454,7 +454,7 @@ describe("import selection catalog", () => {
       files: {
         "COMPANY.md": "# Source Co",
         "README.md": "# Readme",
-        ".paperclip.yaml": "schema: paperclip/v1\n",
+        ".sprint.yaml": "schema: sprint/v1\n",
         "images/company-logo.png": {
           encoding: "base64",
           data: "",
@@ -480,7 +480,7 @@ describe("import selection catalog", () => {
     expect(state.company).toBe(true);
     expect(state.projects.has("alpha")).toBe(true);
     expect(state.issues.has("kickoff")).toBe(true);
-    expect(state.agents.has("ceo")).toBe(true);
+    expect(state.agents.has("scrum_master")).toBe(true);
     expect(state.skills.has("skill-a")).toBe(true);
 
     state.company = false;
@@ -490,7 +490,7 @@ describe("import selection catalog", () => {
 
     const selectedFiles = buildSelectedFilesFromImportSelection(catalog, state);
 
-    expect(selectedFiles).toContain(".paperclip.yaml");
+    expect(selectedFiles).toContain(".sprint.yaml");
     expect(selectedFiles).toContain("projects/alpha/PROJECT.md");
     expect(selectedFiles).toContain("projects/alpha/notes.md");
     expect(selectedFiles).not.toContain("projects/alpha/issues/kickoff/TASK.md");

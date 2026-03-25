@@ -1,4 +1,4 @@
-# Paperclip Component Index
+# Sprint Component Index
 
 Complete inventory of all UI components. Update this file when adding new reusable components.
 
@@ -97,7 +97,7 @@ Supports: critical, high, medium, low. Use alongside StatusIcon in entity row le
 ```tsx
 <EntityRow
   leading={<><StatusIcon status="todo" /><PriorityIcon priority="medium" /></>}
-  identifier="PAP-003"
+  identifier="SPR-003"
   title="Write API documentation"
   trailing={<StatusBadge status="todo" />}
   onClick={() => navigate(`/issues/${id}`)}

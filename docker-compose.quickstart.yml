@@ -1,18 +1,18 @@
 services:
-  paperclip:
+  sprint:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "${PAPERCLIP_PORT:-3100}:3100"
+      - "${SPRINT_PORT:-3100}:3100"
     environment:
       HOST: "0.0.0.0"
-      PAPERCLIP_HOME: "/paperclip"
+      SPRINT_HOME: "/sprint"
       OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
       ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
-      PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
-      PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
-      PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:3100}"
+      SPRINT_DEPLOYMENT_MODE: "authenticated"
+      SPRINT_DEPLOYMENT_EXPOSURE: "private"
+      SPRINT_PUBLIC_URL: "${SPRINT_PUBLIC_URL:-http://localhost:3100}"
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
     volumes:
-      - "${PAPERCLIP_DATA_DIR:-./data/docker-paperclip}:/paperclip"
+      - "${SPRINT_DATA_DIR:-./data/docker-sprint}:/sprint"

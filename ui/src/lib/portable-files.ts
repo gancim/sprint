@@ -1,4 +1,4 @@
-import type { CompanyPortabilityFileEntry } from "@paperclipai/shared";
+import type { CompanyPortabilityFileEntry } from "@sprintai/shared";
 
 const contentTypeByExtension: Record<string, string> = {
   ".gif": "image/gif",

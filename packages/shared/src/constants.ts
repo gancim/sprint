@@ -35,10 +35,8 @@ export const AGENT_ADAPTER_TYPES = [
 export type AgentAdapterType = (typeof AGENT_ADAPTER_TYPES)[number];
 
 export const AGENT_ROLES = [
-  "ceo",
-  "cto",
-  "cmo",
-  "cfo",
+  "scrum_master",
+  "product_owner",
   "engineer",
   "designer",
   "pm",
@@ -50,13 +48,11 @@ export const AGENT_ROLES = [
 export type AgentRole = (typeof AGENT_ROLES)[number];
 
 export const AGENT_ROLE_LABELS: Record<AgentRole, string> = {
-  ceo: "CEO",
-  cto: "CTO",
-  cmo: "CMO",
-  cfo: "CFO",
+  scrum_master: "Scrum Master",
+  product_owner: "Product Owner",
   engineer: "Engineer",
   designer: "Designer",
-  pm: "PM",
+  pm: "Product Manager",
   qa: "QA",
   devops: "DevOps",
   researcher: "Researcher",
@@ -168,7 +164,7 @@ export type RoutineRunStatus = (typeof ROUTINE_RUN_STATUSES)[number];
 export const ROUTINE_RUN_SOURCES = ["schedule", "manual", "api", "webhook"] as const;
 export type RoutineRunSource = (typeof ROUTINE_RUN_SOURCES)[number];
 
-export const PAUSE_REASONS = ["manual", "budget", "system"] as const;
+export const PAUSE_REASONS = ["manual", "system"] as const;
 export type PauseReason = (typeof PAUSE_REASONS)[number];
 
 export const PROJECT_COLORS = [
@@ -184,7 +180,7 @@ export const PROJECT_COLORS = [
   "#3b82f6", // blue
 ] as const;
 
-export const APPROVAL_TYPES = ["hire_agent", "approve_ceo_strategy", "budget_override_required"] as const;
+export const APPROVAL_TYPES = ["hire_agent", "approve_scope_change", "approve_team_member"] as const;
 export type ApprovalType = (typeof APPROVAL_TYPES)[number];
 
 export const APPROVAL_STATUSES = [
@@ -206,73 +202,6 @@ export type SecretProvider = (typeof SECRET_PROVIDERS)[number];
 
 export const STORAGE_PROVIDERS = ["local_disk", "s3"] as const;
 export type StorageProvider = (typeof STORAGE_PROVIDERS)[number];
-
-export const BILLING_TYPES = [
-  "metered_api",
-  "subscription_included",
-  "subscription_overage",
-  "credits",
-  "fixed",
-  "unknown",
-] as const;
-export type BillingType = (typeof BILLING_TYPES)[number];
-
-export const FINANCE_EVENT_KINDS = [
-  "inference_charge",
-  "platform_fee",
-  "credit_purchase",
-  "credit_refund",
-  "credit_expiry",
-  "byok_fee",
-  "gateway_overhead",
-  "log_storage_charge",
-  "logpush_charge",
-  "provisioned_capacity_charge",
-  "training_charge",
-  "custom_model_import_charge",
-  "custom_model_storage_charge",
-  "manual_adjustment",
-] as const;
-export type FinanceEventKind = (typeof FINANCE_EVENT_KINDS)[number];
-
-export const FINANCE_DIRECTIONS = ["debit", "credit"] as const;
-export type FinanceDirection = (typeof FINANCE_DIRECTIONS)[number];
-
-export const FINANCE_UNITS = [
-  "input_token",
-  "output_token",
-  "cached_input_token",
-  "request",
-  "credit_usd",
-  "credit_unit",
-  "model_unit_minute",
-  "model_unit_hour",
-  "gb_month",
-  "train_token",
-  "unknown",
-] as const;
-export type FinanceUnit = (typeof FINANCE_UNITS)[number];
-
-export const BUDGET_SCOPE_TYPES = ["company", "agent", "project"] as const;
-export type BudgetScopeType = (typeof BUDGET_SCOPE_TYPES)[number];
-
-export const BUDGET_METRICS = ["billed_cents"] as const;
-export type BudgetMetric = (typeof BUDGET_METRICS)[number];
-
-export const BUDGET_WINDOW_KINDS = ["calendar_month_utc", "lifetime"] as const;
-export type BudgetWindowKind = (typeof BUDGET_WINDOW_KINDS)[number];
-
-export const BUDGET_THRESHOLD_TYPES = ["soft", "hard"] as const;
-export type BudgetThresholdType = (typeof BUDGET_THRESHOLD_TYPES)[number];
-
-export const BUDGET_INCIDENT_STATUSES = ["open", "resolved", "dismissed"] as const;
-export type BudgetIncidentStatus = (typeof BUDGET_INCIDENT_STATUSES)[number];
-
-export const BUDGET_INCIDENT_RESOLUTION_ACTIONS = [
-  "keep_paused",
-  "raise_budget_and_resume",
-] as const;
-export type BudgetIncidentResolutionAction = (typeof BUDGET_INCIDENT_RESOLUTION_ACTIONS)[number];
 
 export const HEARTBEAT_INVOCATION_SOURCES = [
   "timer",
@@ -329,7 +258,7 @@ export type MembershipStatus = (typeof MEMBERSHIP_STATUSES)[number];
 export const INSTANCE_USER_ROLES = ["instance_admin"] as const;
 export type InstanceUserRole = (typeof INSTANCE_USER_ROLES)[number];
 
-export const INVITE_TYPES = ["company_join", "bootstrap_ceo"] as const;
+export const INVITE_TYPES = ["company_join", "bootstrap_scrum_master"] as const;
 export type InviteType = (typeof INVITE_TYPES)[number];
 
 export const INVITE_JOIN_TYPES = ["human", "agent", "both"] as const;
@@ -422,7 +351,6 @@ export const PLUGIN_CAPABILITIES = [
   "goals.create",
   "goals.update",
   "activity.read",
-  "costs.read",
   // Data Write
   "issues.create",
   "issues.update",
@@ -462,7 +390,7 @@ export type PluginCapability = (typeof PLUGIN_CAPABILITIES)[number];
 
 /**
  * UI extension slot types. Each slot type corresponds to a mount point in the
- * Paperclip UI where plugin components can be rendered.
+ * Sprint UI where plugin components can be rendered.
  *
  * @see PLUGIN_SPEC.md §19 — UI Extension Model
  */
@@ -501,7 +429,6 @@ export const PLUGIN_RESERVED_COMPANY_ROUTE_SEGMENTS = [
   "issues",
   "goals",
   "approvals",
-  "costs",
   "activity",
   "inbox",
   "design-guide",
@@ -669,7 +596,6 @@ export const PLUGIN_EVENT_TYPES = [
   "goal.updated",
   "approval.created",
   "approval.decided",
-  "cost_event.created",
   "activity.logged",
 ] as const;
 export type PluginEventType = (typeof PLUGIN_EVENT_TYPES)[number];

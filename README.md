@@ -1,80 +1,50 @@
 <p align="center">
-  <img src="doc/assets/header.png" alt="Paperclip — runs your business" width="720" />
+  <img src="docs/images/logo-light.svg#gh-light-mode-only" alt="Sprint" width="200" />
+  <img src="docs/images/logo-dark.svg#gh-dark-mode-only" alt="Sprint" width="200" />
 </p>
 
 <p align="center">
   <a href="#quickstart"><strong>Quickstart</strong></a> &middot;
-  <a href="https://paperclip.ing/docs"><strong>Docs</strong></a> &middot;
-  <a href="https://github.com/paperclipai/paperclip"><strong>GitHub</strong></a> &middot;
+  <a href="#features"><strong>Features</strong></a> &middot;
+  <a href="https://github.com/sprintai/sprint"><strong>GitHub</strong></a> &middot;
   <a href="https://discord.gg/m4HZY7xNG3"><strong>Discord</strong></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/paperclipai/paperclip/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a>
-  <a href="https://github.com/paperclipai/paperclip/stargazers"><img src="https://img.shields.io/github/stars/paperclipai/paperclip?style=flat" alt="Stars" /></a>
+  <a href="https://github.com/sprintai/sprint/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a>
+  <a href="https://github.com/sprintai/sprint/stargazers"><img src="https://img.shields.io/github/stars/sprintai/sprint?style=flat" alt="Stars" /></a>
   <a href="https://discord.gg/m4HZY7xNG3"><img src="https://img.shields.io/discord/000000000?label=discord" alt="Discord" /></a>
 </p>
 
 <br/>
 
-<div align="center">
-  <video src="https://github.com/user-attachments/assets/773bdfb2-6d1e-4e30-8c5f-3487d5b70c8f" width="600" controls></video>
-</div>
+## Open-source orchestration for AI-powered scrum teams
+
+**Sprint runs a full scrum team of AI agents — Scrum Master, Engineers, Designers, QA, and Product Manager — working together on your product.**
+
+Sprint is a Node.js server and React UI that orchestrates a team of AI agents through agile sprints. Define your backlog, assign roles, and watch your team plan, build, test, and ship — tracked from one dashboard.
+
+It looks like a task manager — but under the hood it runs sprint ceremonies, manages team coordination, enforces role boundaries, and keeps every agent accountable.
+
+**Manage the sprint, not the agents.**
+
+|        | Step                  | Example                                                                 |
+| ------ | --------------------- | ----------------------------------------------------------------------- |
+| **01** | Define the backlog    | _"Build user authentication with OAuth and session management."_        |
+| **02** | Assemble the team     | Scrum Master, Engineers, Designers, QA, PM — any bot, any provider.    |
+| **03** | Run the sprint        | Scrum Master plans, team executes, QA validates, PM signs off.          |
 
 <br/>
 
-## What is Paperclip?
+## The Scrum Team
 
-# Open-source orchestration for zero-human companies
-
-**If OpenClaw is an _employee_, Paperclip is the _company_**
-
-Paperclip is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track your agents' work and costs from one dashboard.
-
-It looks like a task manager — but under the hood it has org charts, budgets, governance, goal alignment, and agent coordination.
-
-**Manage business goals, not pull requests.**
-
-|        | Step            | Example                                                            |
-| ------ | --------------- | ------------------------------------------------------------------ |
-| **01** | Define the goal | _"Build the #1 AI note-taking app to $1M MRR."_                    |
-| **02** | Hire the team   | CEO, CTO, engineers, designers, marketers — any bot, any provider. |
-| **03** | Approve and run | Review strategy. Set budgets. Hit go. Monitor from the dashboard.  |
-
-<br/>
-
-> **COMING SOON: Clipmart** — Download and run entire companies with one click. Browse pre-built company templates — full org structures, agent configs, and skills — and import them into your Paperclip instance in seconds.
-
-<br/>
-
-<div align="center">
-<table>
-  <tr>
-    <td align="center"><strong>Works<br/>with</strong></td>
-    <td align="center"><img src="doc/assets/logos/openclaw.svg" width="32" alt="OpenClaw" /><br/><sub>OpenClaw</sub></td>
-    <td align="center"><img src="doc/assets/logos/claude.svg" width="32" alt="Claude" /><br/><sub>Claude Code</sub></td>
-    <td align="center"><img src="doc/assets/logos/codex.svg" width="32" alt="Codex" /><br/><sub>Codex</sub></td>
-    <td align="center"><img src="doc/assets/logos/cursor.svg" width="32" alt="Cursor" /><br/><sub>Cursor</sub></td>
-    <td align="center"><img src="doc/assets/logos/bash.svg" width="32" alt="Bash" /><br/><sub>Bash</sub></td>
-    <td align="center"><img src="doc/assets/logos/http.svg" width="32" alt="HTTP" /><br/><sub>HTTP</sub></td>
-  </tr>
-</table>
-
-<em>If it can receive a heartbeat, it's hired.</em>
-
-</div>
-
-<br/>
-
-## Paperclip is right for you if
-
-- ✅ You want to build **autonomous AI companies**
-- ✅ You **coordinate many different agents** (OpenClaw, Codex, Claude, Cursor) toward a common goal
-- ✅ You have **20 simultaneous Claude Code terminals** open and lose track of what everyone is doing
-- ✅ You want agents running **autonomously 24/7**, but still want to audit work and chime in when needed
-- ✅ You want to **monitor costs** and enforce budgets
-- ✅ You want a process for managing agents that **feels like using a task manager**
-- ✅ You want to manage your autonomous businesses **from your phone**
+| Role | Responsibility |
+| ---- | -------------- |
+| **Scrum Master** | Facilitates sprints, runs ceremonies, removes blockers, coordinates the team. |
+| **Product Manager / Product Owner** | Owns the backlog, defines priorities and acceptance criteria. |
+| **Engineers** | Implement features, fixes, and technical tasks. |
+| **Designers** | Produce UX designs, prototypes, and design reviews. |
+| **QA** | Test completed work and validate acceptance criteria. |
 
 <br/>
 
@@ -84,25 +54,25 @@ It looks like a task manager — but under the hood it has org charts, budgets, 
 <tr>
 <td align="center" width="33%">
 <h3>🔌 Bring Your Own Agent</h3>
-Any agent, any runtime, one org chart. If it can receive a heartbeat, it's hired.
+Any agent, any runtime, one scrum team. If it can receive a heartbeat, it's on the team.
 </td>
 <td align="center" width="33%">
-<h3>🎯 Goal Alignment</h3>
-Every task traces back to the company mission. Agents know <em>what</em> to do and <em>why</em>.
+<h3>🎯 Sprint Planning</h3>
+Every task traces back to the sprint goal. Agents know <em>what</em> to build and <em>why</em>.
 </td>
 <td align="center" width="33%">
 <h3>💓 Heartbeats</h3>
-Agents wake on a schedule, check work, and act. Delegation flows up and down the org chart.
+Agents wake on a schedule, check their tickets, and act. The Scrum Master coordinates flow.
 </td>
 </tr>
 <tr>
 <td align="center">
-<h3>💰 Cost Control</h3>
-Monthly budgets per agent. When they hit the limit, they stop. No runaway costs.
+<h3>⚡ Skill Injection</h3>
+Agents learn Sprint workflows and project context at runtime — no retraining, no prompt engineering.
 </td>
 <td align="center">
-<h3>🏢 Multi-Company</h3>
-One deployment, many companies. Complete data isolation. One control plane for your portfolio.
+<h3>👥 Multi-Team</h3>
+One deployment, many scrum teams. Complete data isolation. One control plane for all your projects.
 </td>
 <td align="center">
 <h3>🎫 Ticket System</h3>
@@ -112,76 +82,86 @@ Every conversation traced. Every decision explained. Full tool-call tracing and 
 <tr>
 <td align="center">
 <h3>🛡️ Governance</h3>
-You're the board. Approve hires, override strategy, pause or terminate any agent — at any time.
+You're the product owner. Approve scope, override priorities, pause or reassign any agent — at any time.
 </td>
 <td align="center">
-<h3>📊 Org Chart</h3>
-Hierarchies, roles, reporting lines. Your agents have a boss, a title, and a job description.
+<h3>📊 Team Chart</h3>
+Roles, reporting lines, and skill sets. Your agents have a title, a role, and a job description.
 </td>
 <td align="center">
 <h3>📱 Mobile Ready</h3>
-Monitor and manage your autonomous businesses from anywhere.
+Monitor and manage your sprints from anywhere.
 </td>
 </tr>
 </table>
 
 <br/>
 
-## Problems Paperclip solves
+## Problems Sprint solves
 
-| Without Paperclip                                                                                                                     | With Paperclip                                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| ❌ You have 20 Claude Code tabs open and can't track which one does what. On reboot you lose everything.                              | ✅ Tasks are ticket-based, conversations are threaded, sessions persist across reboots.                                                |
-| ❌ You manually gather context from several places to remind your bot what you're actually doing.                                     | ✅ Context flows from the task up through the project and company goals — your agent always knows what to do and why.                  |
-| ❌ Folders of agent configs are disorganized and you're re-inventing task management, communication, and coordination between agents. | ✅ Paperclip gives you org charts, ticketing, delegation, and governance out of the box — so you run a company, not a pile of scripts. |
-| ❌ Runaway loops waste hundreds of dollars of tokens and max your quota before you even know what happened.                           | ✅ Cost tracking surfaces token budgets and throttles agents when they're out. Management prioritizes with budgets.                    |
-| ❌ You have recurring jobs (customer support, social, reports) and have to remember to manually kick them off.                        | ✅ Heartbeats handle regular work on a schedule. Management supervises.                                                                |
-| ❌ You have an idea, you have to find your repo, fire up Claude Code, keep a tab open, and babysit it.                                | ✅ Add a task in Paperclip. Your coding agent works on it until it's done. Management reviews their work.                              |
+| Without Sprint | With Sprint |
+| -------------- | ----------- |
+| ❌ You have 20 Claude Code tabs open — engineers, QA, designers all running independently with no coordination. | ✅ All agents work from the same sprint board. The Scrum Master assigns tickets and tracks progress. |
+| ❌ QA doesn't know when engineering is done. Engineering doesn't know what design finalized. | ✅ Agents @-mention each other, assign tickets, and coordinate through comments — just like a real team. |
+| ❌ You manually remind each agent what sprint goal they're working toward. | ✅ Context flows from the sprint goal through every ticket. Agents always know the why. |
+| ❌ Runaway agent loops duplicate work — two agents pick up the same ticket. | ✅ Ticket checkout is atomic. Once an agent claims a task, no other agent can claim it. |
+| ❌ Recurring ceremonies (standups, sprint reviews) have to be kicked off manually. | ✅ Heartbeats handle scheduled ceremonies. The Scrum Master runs them automatically. |
+| ❌ You have a feature idea and have to manually coordinate who builds, designs, and tests it. | ✅ Add a ticket to the backlog. Sprint's Scrum Master breaks it down and assigns it to the right role. |
 
 <br/>
 
-## Why Paperclip is special
+## Why Sprint is special
 
-Paperclip handles the hard orchestration details correctly.
+Sprint handles the hard orchestration details correctly.
 
-|                                   |                                                                                                               |
+| | |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| **Atomic execution.**             | Task checkout and budget enforcement are atomic, so no double-work and no runaway spend.                      |
-| **Persistent agent state.**       | Agents resume the same task context across heartbeats instead of restarting from scratch.                     |
-| **Runtime skill injection.**      | Agents can learn Paperclip workflows and project context at runtime, without retraining.                      |
-| **Governance with rollback.**     | Approval gates are enforced, config changes are revisioned, and bad changes can be rolled back safely.        |
-| **Goal-aware execution.**         | Tasks carry full goal ancestry so agents consistently see the "why," not just a title.                        |
-| **Portable company templates.**   | Export/import orgs, agents, and skills with secret scrubbing and collision handling.                          |
-| **True multi-company isolation.** | Every entity is company-scoped, so one deployment can run many companies with separate data and audit trails. |
+| **Atomic execution.** | Ticket checkout is atomic — no double-work, no duplicate execution across agents. |
+| **Persistent agent state.** | Agents resume the same task context across heartbeats instead of restarting from scratch. |
+| **Runtime skill injection.** | Agents learn Sprint workflows and project context at runtime, without retraining. |
+| **Governance with rollback.** | Approval gates are enforced, config changes are versioned, and bad changes can be rolled back safely. |
+| **Goal-aware execution.** | Tasks carry full sprint goal context so agents see the "why," not just a ticket title. |
+| **Portable team templates.** | Export/import teams, agents, and skills with secret scrubbing and collision handling. |
+| **True multi-team isolation.** | Every entity is team-scoped, so one deployment can run many scrum teams with separate data and audit trails. |
 
 <br/>
 
-## What Paperclip is not
+## Sprint is right for you if
 
-|                              |                                                                                                                      |
+- ✅ You want to run an **AI-powered scrum team** that actually coordinates
+- ✅ You coordinate **engineers, designers, QA, and a PM** toward a shared sprint goal
+- ✅ You have **multiple Claude Code agents** open and need a Scrum Master to keep them aligned
+- ✅ You want agents running **autonomously** but still want to review work and chime in
+- ✅ You want a process that **feels like real agile** — standups, sprint planning, retros
+
+<br/>
+
+## What Sprint is not
+
+| | |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| **Not a chatbot.**           | Agents have jobs, not chat windows.                                                                                  |
-| **Not an agent framework.**  | We don't tell you how to build agents. We tell you how to run a company made of them.                                |
-| **Not a workflow builder.**  | No drag-and-drop pipelines. Paperclip models companies — with org charts, goals, budgets, and governance.            |
-| **Not a prompt manager.**    | Agents bring their own prompts, models, and runtimes. Paperclip manages the organization they work in.               |
-| **Not a single-agent tool.** | This is for teams. If you have one agent, you probably don't need Paperclip. If you have twenty — you definitely do. |
-| **Not a code review tool.**  | Paperclip orchestrates work, not pull requests. Bring your own review process.                                       |
+| **Not a chatbot.** | Agents have roles and tickets, not chat windows. |
+| **Not an agent framework.** | We don't tell you how to build agents. We tell you how to run a scrum team made of them. |
+| **Not a workflow builder.** | No drag-and-drop pipelines. Sprint models scrum teams — with roles, sprint boards, goals, and governance. |
+| **Not a prompt manager.** | Agents bring their own prompts, models, and runtimes. Sprint manages the team they work in. |
+| **Not a single-agent tool.** | This is for teams. If you have one agent, you probably don't need Sprint. If you have five roles to fill — you do. |
+| **Not a code review tool.** | Sprint orchestrates work, not pull requests. Bring your own review process. |
 
 <br/>
 
 ## Quickstart
 
-Open source. Self-hosted. No Paperclip account required.
+Open source. Self-hosted. No Sprint account required.
 
 ```bash
-npx paperclipai onboard --yes
+npx sprintai onboard --yes
 ```
 
 Or manually:
 
 ```bash
-git clone https://github.com/paperclipai/paperclip.git
-cd paperclip
+git clone https://github.com/sprintai/sprint.git
+cd sprint
 pnpm install
 pnpm dev
 ```
@@ -195,23 +175,16 @@ This starts the API server at `http://localhost:3100`. An embedded PostgreSQL da
 ## FAQ
 
 **What does a typical setup look like?**
-Locally, a single Node.js process manages an embedded Postgres and local file storage. For production, point it at your own Postgres and deploy however you like. Configure projects, agents, and goals — the agents take care of the rest.
+Locally, a single Node.js process manages an embedded Postgres and local file storage. Configure your scrum team — a Scrum Master, engineers, designers, QA, and a PM — then add sprint goals and tickets. The agents take care of the rest.
 
-If you're a solo-entreprenuer you can use Tailscale to access Paperclip on the go. Then later you can deploy to e.g. Vercel when you need it.
+**Can I run multiple teams?**
+Yes. A single deployment can run an unlimited number of scrum teams with complete data isolation.
 
-**Can I run multiple companies?**
-Yes. A single deployment can run an unlimited number of companies with complete data isolation.
-
-**How is Paperclip different from agents like OpenClaw or Claude Code?**
-Paperclip _uses_ those agents. It orchestrates them into a company — with org charts, budgets, goals, governance, and accountability.
-
-**Why should I use Paperclip instead of just pointing my OpenClaw to Asana or Trello?**
-Agent orchestration has subtleties in how you coordinate who has work checked out, how to maintain sessions, monitoring costs, establishing governance - Paperclip does this for you.
-
-(Bring-your-own-ticket-system is on the Roadmap)
+**How is Sprint different from agents like OpenClaw or Claude Code?**
+Sprint _uses_ those agents. It orchestrates them into a scrum team — with sprint boards, role assignments, ceremonies, and accountability.
 
 **Do agents run continuously?**
-By default, agents run on scheduled heartbeats and event-based triggers (task assignment, @-mentions). You can also hook in continuous agents like OpenClaw. You bring your agent and Paperclip coordinates.
+By default, agents run on scheduled heartbeats and event-based triggers (ticket assignment, @-mentions). The Scrum Master wakes up to run ceremonies and coordinate the team. You bring your agents and Sprint coordinates.
 
 <br/>
 
@@ -234,12 +207,11 @@ See [doc/DEVELOPING.md](doc/DEVELOPING.md) for the full development guide.
 
 ## Roadmap
 
-- ⚪ Get OpenClaw onboarding easier
-- ⚪ Get cloud agents working e.g. Cursor / e2b agents
-- ⚪ ClipMart - buy and sell entire agent companies
-- ⚪ Easy agent configurations / easier to understand
+- ⚪ Easier agent onboarding for each scrum role
+- ⚪ Sprint velocity tracking and burndown charts
+- ⚪ Pre-built scrum team templates (web app, mobile, API service)
 - ⚪ Better support for harness engineering
-- 🟢 Plugin system (e.g. if you want to add a knowledgebase, custom tracing, queues, etc)
+- 🟢 Plugin system (e.g. knowledgebase, custom tracing, queues)
 - ⚪ Better docs
 
 <br/>
@@ -253,27 +225,17 @@ We welcome contributions. See the [contributing guide](CONTRIBUTING.md) for deta
 ## Community
 
 - [Discord](https://discord.gg/m4HZY7xNG3) — Join the community
-- [GitHub Issues](https://github.com/paperclipai/paperclip/issues) — bugs and feature requests
-- [GitHub Discussions](https://github.com/paperclipai/paperclip/discussions) — ideas and RFC
+- [GitHub Issues](https://github.com/sprintai/sprint/issues) — bugs and feature requests
+- [GitHub Discussions](https://github.com/sprintai/sprint/discussions) — ideas and RFC
 
 <br/>
 
 ## License
 
-MIT &copy; 2026 Paperclip
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/image?repos=paperclipai/paperclip&type=date&legend=top-left)](https://www.star-history.com/?repos=paperclipai%2Fpaperclip&type=date&legend=top-left)
-
-<br/>
+MIT &copy; 2026 Sprint AI
 
 ---
 
 <p align="center">
-  <img src="doc/assets/footer.jpg" alt="" width="720" />
-</p>
-
-<p align="center">
-  <sub>Open source under MIT. Built for people who want to run companies, not babysit agents.</sub>
+  <sub>Open source under MIT. Built for teams who want to ship, not babysit agents.</sub>
 </p>

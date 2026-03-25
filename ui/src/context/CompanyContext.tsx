@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Company } from "@paperclipai/shared";
+import type { Company } from "@sprintai/shared";
 import { companiesApi } from "../api/companies";
 import { ApiError } from "../api/client";
 import { queryKeys } from "../lib/queryKeys";
@@ -27,11 +27,10 @@ interface CompanyContextValue {
   createCompany: (data: {
     name: string;
     description?: string | null;
-    budgetMonthlyCents?: number;
   }) => Promise<Company>;
 }
 
-const STORAGE_KEY = "paperclip.selectedCompanyId";
+const STORAGE_KEY = "sprint.selectedCompanyId";
 
 const CompanyContext = createContext<CompanyContextValue | null>(null);
 
@@ -88,7 +87,6 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     mutationFn: (data: {
       name: string;
       description?: string | null;
-      budgetMonthlyCents?: number;
     }) =>
       companiesApi.create(data),
     onSuccess: (company) => {
@@ -101,7 +99,6 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     async (data: {
       name: string;
       description?: string | null;
-      budgetMonthlyCents?: number;
     }) => {
       return createMutation.mutateAsync(data);
     },
