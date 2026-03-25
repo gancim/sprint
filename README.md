@@ -154,13 +154,7 @@ Sprint handles the hard orchestration details correctly.
 Open source. Self-hosted. No Sprint account required.
 
 ```bash
-npx sprintai onboard --yes
-```
-
-Or manually:
-
-```bash
-git clone https://github.com/sprintai/sprint.git
+git clone https://github.com/gancim/sprint.git
 cd sprint
 pnpm install
 pnpm dev
