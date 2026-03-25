@@ -205,31 +205,6 @@ See [doc/DEVELOPING.md](doc/DEVELOPING.md) for the full development guide.
 
 <br/>
 
-## Roadmap
-
-- ⚪ Easier agent onboarding for each scrum role
-- ⚪ Sprint velocity tracking and burndown charts
-- ⚪ Pre-built scrum team templates (web app, mobile, API service)
-- ⚪ Better support for harness engineering
-- 🟢 Plugin system (e.g. knowledgebase, custom tracing, queues)
-- ⚪ Better docs
-
-<br/>
-
-## Contributing
-
-We welcome contributions. See the [contributing guide](CONTRIBUTING.md) for details.
-
-<br/>
-
-## Community
-
-- [Discord](https://discord.gg/m4HZY7xNG3) — Join the community
-- [GitHub Issues](https://github.com/sprintai/sprint/issues) — bugs and feature requests
-- [GitHub Discussions](https://github.com/sprintai/sprint/discussions) — ideas and RFC
-
-<br/>
-
 ## License
 
 MIT &copy; 2026 Sprint AI
