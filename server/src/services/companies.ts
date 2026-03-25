@@ -2,7 +2,6 @@ import { count, eq } from "drizzle-orm";
 import type { Db } from "@sprintai/db";
 import {
   companies,
-  companyLogos,
   assets,
   agents,
   agentApiKeys,
@@ -15,7 +14,6 @@ import {
   goals,
   heartbeatRuns,
   heartbeatRunEvents,
-  financeEvents,
   approvalComments,
   approvals,
   activityLog,
@@ -25,7 +23,7 @@ import {
   principalPermissionGrants,
   companyMemberships,
 } from "@sprintai/db";
-import { notFound, unprocessable } from "../errors.js";
+import { notFound } from "../errors.js";
 
 export function companyService(db: Db) {
   const ISSUE_PREFIX_FALLBACK = "CMP";
@@ -37,23 +35,14 @@ export function companyService(db: Db) {
     status: companies.status,
     issuePrefix: companies.issuePrefix,
     issueCounter: companies.issueCounter,
-    logoAssetId: companyLogos.assetId,
     createdAt: companies.createdAt,
     updatedAt: companies.updatedAt,
   };
 
-  function enrichCompany<T extends { logoAssetId: string | null }>(company: T) {
-    return {
-      ...company,
-      logoUrl: company.logoAssetId ? `/api/assets/${company.logoAssetId}/content` : null,
-    };
-  }
-
   function getCompanyQuery(database: Pick<Db, "select">) {
     return database
       .select(companySelection)
-      .from(companies)
-      .leftJoin(companyLogos, eq(companyLogos.companyId, companies.id));
+      .from(companies);
   }
 
   function deriveIssuePrefixBase(name: string) {
@@ -100,16 +89,13 @@ export function companyService(db: Db) {
 
   return {
     list: async () => {
-      const rows = await getCompanyQuery(db);
-      return rows.map((row) => enrichCompany(row));
+      return getCompanyQuery(db);
     },
 
     getById: async (id: string) => {
-      const row = await getCompanyQuery(db)
+      return getCompanyQuery(db)
         .where(eq(companies.id, id))
         .then((rows) => rows[0] ?? null);
-      if (!row) return null;
-      return enrichCompany(row);
     },
 
     create: async (data: typeof companies.$inferInsert) => {
@@ -118,12 +104,12 @@ export function companyService(db: Db) {
         .where(eq(companies.id, created.id))
         .then((rows) => rows[0] ?? null);
       if (!row) throw notFound("Company not found after creation");
-      return enrichCompany(row);
+      return row;
     },
 
     update: (
       id: string,
-      data: Partial<typeof companies.$inferInsert> & { logoAssetId?: string | null },
+      data: Partial<typeof companies.$inferInsert>,
     ) =>
       db.transaction(async (tx) => {
         const existing = await getCompanyQuery(tx)
@@ -131,54 +117,13 @@ export function companyService(db: Db) {
           .then((rows) => rows[0] ?? null);
         if (!existing) return null;
 
-        const { logoAssetId, ...companyPatch } = data;
-
-        if (logoAssetId !== undefined && logoAssetId !== null) {
-          const nextLogoAsset = await tx
-            .select({ id: assets.id, companyId: assets.companyId })
-            .from(assets)
-            .where(eq(assets.id, logoAssetId))
-            .then((rows) => rows[0] ?? null);
-          if (!nextLogoAsset) throw notFound("Logo asset not found");
-          if (nextLogoAsset.companyId !== existing.id) {
-            throw unprocessable("Logo asset must belong to the same company");
-          }
-        }
-
         const updated = await tx
           .update(companies)
-          .set({ ...companyPatch, updatedAt: new Date() })
+          .set({ ...data, updatedAt: new Date() })
           .where(eq(companies.id, id))
           .returning()
           .then((rows) => rows[0] ?? null);
-        if (!updated) return null;
-
-        if (logoAssetId === null) {
-          await tx.delete(companyLogos).where(eq(companyLogos.companyId, id));
-        } else if (logoAssetId !== undefined) {
-          await tx
-            .insert(companyLogos)
-            .values({
-              companyId: id,
-              assetId: logoAssetId,
-            })
-            .onConflictDoUpdate({
-              target: companyLogos.companyId,
-              set: {
-                assetId: logoAssetId,
-                updatedAt: new Date(),
-              },
-            });
-        }
-
-        if (logoAssetId !== undefined && existing.logoAssetId && existing.logoAssetId !== logoAssetId) {
-          await tx.delete(assets).where(eq(assets.id, existing.logoAssetId));
-        }
-
-        return enrichCompany({
-          ...updated,
-          logoAssetId: logoAssetId === undefined ? existing.logoAssetId : logoAssetId,
-        });
+        return updated;
       }),
 
     archive: (id: string) =>
@@ -190,11 +135,9 @@ export function companyService(db: Db) {
           .returning()
           .then((rows) => rows[0] ?? null);
         if (!updated) return null;
-        const row = await getCompanyQuery(tx)
+        return getCompanyQuery(tx)
           .where(eq(companies.id, id))
           .then((rows) => rows[0] ?? null);
-        if (!row) return null;
-        return enrichCompany(row);
       }),
 
     remove: (id: string) =>
@@ -207,7 +150,6 @@ export function companyService(db: Db) {
         await tx.delete(agentApiKeys).where(eq(agentApiKeys.companyId, id));
         await tx.delete(agentRuntimeState).where(eq(agentRuntimeState.companyId, id));
         await tx.delete(issueComments).where(eq(issueComments.companyId, id));
-        await tx.delete(financeEvents).where(eq(financeEvents.companyId, id));
         await tx.delete(approvalComments).where(eq(approvalComments.companyId, id));
         await tx.delete(approvals).where(eq(approvals.companyId, id));
         await tx.delete(companySecrets).where(eq(companySecrets.companyId, id));
@@ -216,7 +158,6 @@ export function companyService(db: Db) {
         await tx.delete(principalPermissionGrants).where(eq(principalPermissionGrants.companyId, id));
         await tx.delete(companyMemberships).where(eq(companyMemberships.companyId, id));
         await tx.delete(issues).where(eq(issues.companyId, id));
-        await tx.delete(companyLogos).where(eq(companyLogos.companyId, id));
         await tx.delete(assets).where(eq(assets.companyId, id));
         await tx.delete(goals).where(eq(goals.companyId, id));
         await tx.delete(projects).where(eq(projects.companyId, id));
