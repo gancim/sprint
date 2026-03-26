@@ -281,11 +281,6 @@ export function ApprovalDetail() {
               </Button>
             </>
           )}
-          {isBudgetApproval && approval.status === "pending" && (
-            <p className="text-sm text-muted-foreground">
-              Resolve this budget stop from the budget controls on <Link to="/costs" className="underline underline-offset-2">/costs</Link>.
-            </p>
-          )}
           {approval.status === "pending" && (
             <Button
               size="sm"
